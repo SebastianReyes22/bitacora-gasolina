@@ -1,0 +1,7 @@
+REGISTRO DE ENTRADAS Y SALIDAS DE EMPLEADOS
+
+SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.fechaEntrada, registros.fechaSalida FROM empleados JOIN registros ON registros.numNomina = empleados.nomina WHERE empleados.nomina = 
+
+
+SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.fechaEntrada, registros.fechaSalida FROM empleados JOIN registros ON registros.numNomina = empleados.nomina WHERE registros.fechaEntrada BETWEEN '2021/12/30' AND '2021/12/31' OR empleados.nomina LIKE '''%' OR empleados.nombre LIKE '''%' OR empleados.departamento LIKE '''%' ORDER BY registros.fechaEntrada
+

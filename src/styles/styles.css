@@ -1,0 +1,33 @@
+.login {
+  position: absolute;
+  
+  background: #354057;
+}
+
+.titleLogin {
+  font-size: 40px;
+  text-align: center;
+}
+
+.card-style {
+  background-color: #2b2e3d;
+  color: white;
+}
+
+.table {
+  background-color: #ffffff;
+}
+
+.imageUser {
+  border-radius: 8px;
+  width: 40%;
+  margin-left: auto;
+  margin-right: auto;
+  display: block;
+}
+
+.textUser {
+  font-size: 24px;
+  text-align: center;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
