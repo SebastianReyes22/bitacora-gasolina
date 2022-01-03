@@ -1,47 +1,47 @@
-import React, { useState } from "react";
-import Axios from "axios";
-import { Button, Card, Col, Form, Row } from "react-bootstrap";
-import "../styles/styles.css";
+import React, { useState } from 'react'
+import Axios from 'axios'
+import { Button, Card, Col, Form, Row } from 'react-bootstrap'
+import '../styles/styles.css'
 
 export default function Login(props) {
-  const URI = process.env.REACT_APP_SERVER_URL;
+  const URI = process.env.REACT_APP_SERVER_URL
 
-  const [userName, setUserName] = useState("");
-  const [passwordUser, setPasswordUser] = useState("");
+  const [userName, setUserName] = useState('')
+  const [passwordUser, setPasswordUser] = useState('')
 
   const handleChangeUser = (e) => {
-    e.preventDefault();
-    setUserName(e.target.value);
-  };
+    e.preventDefault()
+    setUserName(e.target.value)
+  }
 
   const handleChangePassword = (e) => {
-    e.preventDefault();
-    setPasswordUser(e.target.value);
-  };
+    e.preventDefault()
+    setPasswordUser(e.target.value)
+  }
 
   const handleSubmit = async () => {
-    let formData = new FormData();
-    formData.append("option", "loginQuery");
-    formData.append("userName", userName);
-    formData.append("passwordUser", passwordUser);
+    let formData = new FormData()
+    formData.append('option', 'loginQuery')
+    formData.append('userName', userName)
+    formData.append('passwordUser', passwordUser)
 
     await Axios({
-      method: "POST",
+      method: 'POST',
       url: URI,
       data: formData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
         if (response.data.login === true) {
-          window.location = "/home";
+          window.location = '/home'
         } else {
-          alert("Usuario no registrado, comuniquese con el administrador");
+          alert('Usuario no registrado, comuniquese con el administrador')
         }
       })
       .catch((error) => {
-        console.log("Error en el servidor", error);
-      });
-  };
+        console.log('Error en el servidor', error)
+      })
+  }
 
   return (
     <Row className="App-header-home">
@@ -78,5 +78,5 @@ export default function Login(props) {
         </Card>
       </Col>
     </Row>
-  );
+  )
 }

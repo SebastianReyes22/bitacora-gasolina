@@ -1,80 +1,80 @@
-import React, { useState } from "react";
-import Axios from "axios";
-import Headers from "./Headers";
-import { Form, Row, Col, Card, Button } from "react-bootstrap";
+import React, { useState } from 'react'
+import Axios from 'axios'
+import Headers from './Headers'
+import { Form, Row, Col, Card, Button } from 'react-bootstrap'
 
 export default function CreateUser() {
-  const URI = process.env.REACT_APP_SERVER_URL;
+  const URI = process.env.REACT_APP_SERVER_URL
 
-  const [nomina, setNomina] = useState("");
-  const [name, setName] = useState("");
-  const [department, setDepartment] = useState("");
-  var picture;
+  const [nomina, setNomina] = useState('')
+  const [name, setName] = useState('')
+  const [department, setDepartment] = useState('')
+  var picture
 
   //Funcion para sacar el valor del input de nomina
   const handleNomina = (e) => {
-    e.preventDefault();
-    setNomina(e.target.value);
-  };
+    e.preventDefault()
+    setNomina(e.target.value)
+  }
 
   //Funcion para sacar el valor del input de nombre
   const handleName = (e) => {
-    e.preventDefault();
-    setName(e.target.value);
-  };
+    e.preventDefault()
+    setName(e.target.value)
+  }
 
   //Funcion que convierte la imagen a base64
   const convertToBase64 = (files) => {
     Array.from(files).forEach((file) => {
-      var reader = new FileReader();
-      reader.readAsDataURL(file);
+      var reader = new FileReader()
+      reader.readAsDataURL(file)
       reader.onload = function () {
-        var base64 = reader.result;
-        picture = base64;
-        console.log(picture);
-      };
-    });
-  };
+        var base64 = reader.result
+        picture = base64
+        console.log(picture)
+      }
+    })
+  }
 
   //Funcion para sacar el valor del input de departamento
   const handleDepartment = (e) => {
-    e.preventDefault();
-    setDepartment(e.target.value);
-  };
+    e.preventDefault()
+    setDepartment(e.target.value)
+  }
 
   //Funcion que manda el POST a la bd
   const handleSubmit = async () => {
-    let formData = new FormData();
-    formData.append("option", "insertUser");
-    formData.append("nomina", nomina);
-    formData.append("nombre", name);
-    formData.append("foto", picture);
-    formData.append("departamento", department);
+    let formData = new FormData()
+    formData.append('option', 'insertUser')
+    formData.append('nomina', nomina)
+    formData.append('nombre', name)
+    formData.append('foto', picture)
+    formData.append('departamento', department)
 
     await Axios({
-      method: "POST",
+      method: 'POST',
       url: URI,
       data: formData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
         if (response.data.insert === true) {
-          console.log("Datos capturados correctamente");
-          alert("Datos capturados correctamente");
-          window.location = "/addUser";
+          console.log('Datos capturados correctamente')
+          alert('Datos capturados correctamente')
+          window.location = '/addUser'
         } else {
-          alert("Err, comuniquese con el administrador");
+          alert('Err, comuniquese con el administrador')
         }
       })
       .catch((error) => {
-        console.log("Error en el servidor", error);
-      });
-  };
+        console.log('Error en el servidor', error)
+      })
+  }
 
   //Funcion que limpa todos los imput a su valor por defecto
   const handleRefresh = () => {
-    window.location = "/addUser";
-  };
+    window.location = '/addUser'
+  }
 
   return (
     <>
@@ -166,5 +166,5 @@ export default function CreateUser() {
         </Col>
       </Row>
     </>
-  );
+  )
 }

@@ -1,56 +1,54 @@
-import React, { useState } from "react";
-import Axios from "axios";
-import { Form, Button, Row, Col, Card } from "react-bootstrap";
+import React, { useState } from 'react'
+import Axios from 'axios'
+import { Form, Button, Row, Col, Card } from 'react-bootstrap'
 
 export default function Home(props) {
-  const URI = process.env.REACT_APP_SERVER_URL;
+  const URI = process.env.REACT_APP_SERVER_URL
 
-  const [nomina, setNumNomina] = useState("");
-  const [userName, setUserName] = useState("");
-  const [userArea, setUserArea] = useState("");
-  const [userImage, setUserImage] = useState("");
+  const [nomina, setNumNomina] = useState('')
+  const [userName, setUserName] = useState('')
+  const [userArea, setUserArea] = useState('')
+  const [userImage, setUserImage] = useState('')
 
   const handleChangeNomina = (e) => {
-    e.preventDefault();
-    setNumNomina(e.target.value);
-  };
+    e.preventDefault()
+    setNumNomina(e.target.value)
+  }
 
   const handleSubmit = async () => {
-    let formData = new FormData();
-    formData.append("option", "selectEmpleado");
-    formData.append("nomina", nomina);
+    let formData = new FormData()
+    formData.append('option', 'selectEmpleado')
+    formData.append('nomina', nomina)
 
     await Axios({
-      method: "POST",
+      method: 'POST',
       url: URI,
       data: formData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
         if (response.data.info === true) {
-          setUserName(response.data.name);
-          setUserImage(response.data.picture);
-          setUserArea(response.data.deparment);
+          setUserName(response.data.name)
+          setUserImage(response.data.picture)
+          setUserArea(response.data.deparment)
         } else {
           alert(
-            "Empleado no encontrado en la base de datos, comuniquese con el administrador"
-          );
+            'Empleado no encontrado en la base de datos, comuniquese con el administrador'
+          )
         }
       })
       .catch((error) => {
-        console.log("Error en el servidor", error);
-      });
-  };
-
-  const handleUpdate = async () => {};
+        console.log('Error en el servidor', error)
+      })
+  }
 
   return (
     <Row className="App-header-home">
       <Col className="col-sm-6 mt-5 ">
         <Card className="card-style">
           <Card.Header className="titleLogin">
-            {" "}
-            ⛽ BITÁCORA DE GASOLINA ⛽{" "}
+            {' '}
+            ⛽ BITÁCORA DE GASOLINA ⛽{' '}
           </Card.Header>
           <Card.Body>
             <Form className="">
@@ -91,12 +89,12 @@ export default function Home(props) {
             </Form.Group>
             <Form.Group as={Row} className="mt-5" controlId="formFechas">
               <Col>
-                <img className="imageUser" src={userImage} alt=""/>
+                <img className="imageUser" src={userImage} alt="" />
               </Col>
             </Form.Group>
           </Card.Body>
         </Card>
       </Col>
     </Row>
-  );
+  )
 }

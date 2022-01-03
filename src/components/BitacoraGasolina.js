@@ -1,59 +1,89 @@
-import { React, useEffect, useState } from "react";
-import Headers from "./Headers";
-import { Form, Button, Row, Col, Card, Table } from "react-bootstrap";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
-import Axios from "axios";
+import { React, useState } from 'react'
+import Headers from './Headers'
+import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap'
+import DatePicker from 'react-datepicker'
+import 'react-datepicker/dist/react-datepicker.css'
+import Axios from 'axios'
+import ReactHtmlTableToExcel from 'react-html-table-to-excel'
 
-export default function Dashboard() {
+export default function BitacoraGasolina() {
   //Cadena de conexión
-  const URI = process.env.REACT_APP_SERVER_URL;
+  const URI = process.env.REACT_APP_SERVER_URL
 
   //Variables de los imput que se mandan a la api
-  const [date, setDate] = useState(new Date());
-  const [nomina, setNomina] = useState("");
+  const [startDate, setStartDate] = useState(new Date())
+  const [endDate, setEndDate] = useState(new Date())
+  const [nomina, setNomina] = useState('')
+  const [userName, setUserName] = useState('')
+  const [department, setDepartment] = useState('')
 
   //Variables para mostrar en la tabla
-  const [userData, setUserData] = useState([]);
+  const [userData, setUserData] = useState([])
+
+  //Funcion que cambia el valor de lafecha de inicio
+  const handleChangeStartDate = (date) => {
+    setStartDate(date)
+  }
+
+  //Funcion que cambia el valor de la fecha final
+  const handleChangeEndDate = (date) => {
+    setEndDate(date)
+  }
 
   //Funcion que cambia el valor del input nomina
   const handleChangeNomina = (e) => {
-    e.preventDefault();
-    setNomina(e.target.value);
-  };
+    e.preventDefault()
+    setNomina(e.target.value)
+  }
+
+  //Funcion que cambia el valor del input nombre
+  const handleChangeUserName = (e) => {
+    e.preventDefault()
+    setUserName(e.target.value)
+  }
+
+  //Funcion que cambia el valor del input departamento
+  const handleChangeDepartment = (e) => {
+    e.preventDefault()
+    setDepartment(e.target.value)
+  }
 
   //Consulta de información seleccionada
   const handleSubmit = async () => {
-    let formData = new FormData();
-    formData.append("option", "selectUser");
-    formData.append("nomina", nomina);
-
+    let formData = new FormData()
+    formData.append('option', 'selectUser')
+    formData.append('startDate', startDate.toJSON())
+    formData.append('endDate', endDate.toJSON())
+    formData.append('nomina', nomina)
+    formData.append('userName', userName)
+    formData.append('department', department)
+    
     await Axios({
-      method: "POST",
+      method: 'POST',
       url: URI,
       data: formData,
-      config: { headers: { "Content-Type": "multipart/form-data" } },
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
         if (response.data.user === false) {
-          alert("Registros no encontrados");
-          window.location = "./dashboard";
+          alert('Registros no encontrados')
+          window.location = './dashboard'
         } else {
-          console.log(response.data);
-          setUserData(response.data);
+          console.log(response.data)
+          setUserData(response.data)
         }
       })
       .catch((error) => {
-        console.log("Error en el servidor", error);
-      });
-  };
+        console.log('Error en el servidor', error)
+      })
+  }
 
   //Funcion que limpia el dashboard
   const handleClean = () => {
-    if (window.confirm("Realmente quieres limpiar la busqueda")) {
-      window.location = "./dashboard";
+    if (window.confirm('Realmente quieres limpiar la busqueda')) {
+      window.location = './dashboard'
     }
-  };
+  }
 
   return (
     <>
@@ -66,19 +96,19 @@ export default function Dashboard() {
               <Form className="">
                 <Form.Group as={Row} className="mb-3" controlId="formFechas">
                   <Col sm="3">
-                    <Form.Label column>Fecha de Inicio</Form.Label>
+                    <Form.Label column>Fecha de inicio</Form.Label>
                     <DatePicker
-                      selected={date}
-                      onChange={(date) => setDate(date)}
-                      dateFormat="Pp"
+                      dateFormat="yyyy/MM/dd"
+                      selected={startDate}
+                      onChange={handleChangeStartDate}
                     />
                   </Col>
                   <Col sm="3">
-                    <Form.Label column>Fecha de Termino</Form.Label>
+                    <Form.Label column>Fecha de termino</Form.Label>
                     <DatePicker
-                      selected={date}
-                      onChange={(date) => setDate(date)}
-                      dateFormat="Pp"
+                      dateFormat="yyyy/MM/dd"
+                      selected={endDate}
+                      onChange={handleChangeEndDate}
                     />
                   </Col>
                   <Col sm="2">
@@ -95,9 +125,14 @@ export default function Dashboard() {
                   </Col>
                   <Col sm="2">
                     <div className="d-grid gap-2">
-                      <Button className="mt-4" variant="success" size="lg">
-                        Descargar
-                      </Button>
+                      <ReactHtmlTableToExcel 
+                        id="btnExportExcel"
+                        className="btn btn-success mt-4 btn-lg"
+                        table="tableInfoUsers"
+                        filname="bitácoragasolina"
+                        sheet="Hoja 1"
+                        buttonText="Descargar"
+                      />
                     </div>
                   </Col>
                   <Col sm="2">
@@ -134,6 +169,8 @@ export default function Dashboard() {
                       sm="6"
                       type="text"
                       placeholder="Nombre del empleado"
+                      value={userName}
+                      onChange={handleChangeUserName}
                     />
                   </Col>
                   <Col sm="4">
@@ -142,10 +179,12 @@ export default function Dashboard() {
                       sm="6"
                       type="text"
                       placeholder="Nombre del departamento"
+                      value={department}
+                      onChange={handleChangeDepartment}
                     />
                   </Col>
                 </Form.Group>
-                <Table striped bordered hover>
+                <Table striped bordered hover id="tableInfoUsers">
                   <thead>
                     <tr>
                       <th>Nómina</th>
@@ -174,5 +213,5 @@ export default function Dashboard() {
         </Col>
       </Row>
     </>
-  );
+  )
 }
