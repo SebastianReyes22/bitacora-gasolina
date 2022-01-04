@@ -67,7 +67,7 @@ export default function BitacoraGasolina() {
       .then((response) => {
         if (response.data.user === false) {
           alert('Registros no encontrados')
-          window.location = './dashboard'
+          window.location = './bitacora-gasolina'
         } else {
           console.log(response.data)
           setUserData(response.data)
@@ -81,7 +81,7 @@ export default function BitacoraGasolina() {
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './dashboard'
+      window.location = './bitacora-gasolina'
     }
   }
 
@@ -93,7 +93,7 @@ export default function BitacoraGasolina() {
           <Card className="card-style">
             <Card.Header className="titleLogin">Generar bitácora</Card.Header>
             <Card.Body>
-              <Form className="">
+              <Form>
                 <Form.Group as={Row} className="mb-3" controlId="formFechas">
                   <Col sm="3">
                     <Form.Label column>Fecha de inicio</Form.Label>

@@ -114,4 +114,40 @@ if ($_POST['option'] == 'selectUser') {
         echo json_encode(['user' => false]);
     }
 }
+
+//Obtiene un array con los los datos de los empleados y su promedio de asistencia del mes solicitado
+if ($_POST['option'] == 'getReports') {
+    $array = [];
+    $x = 0;
+
+    $sql = "SELECT empleados.nomina, empleados.nombre, empleados.departamento, asistencia, promedio 
+                FROM (SELECT empleados.nomina, empleados.nombre, empleados.departamento, 
+                COUNT(registros.fechaEntrada) AS asistencia, (COUNT(registros.fechaEntrada) / 30 * 100) 
+                AS promedio FROM empleados INNER JOIN registros ON empleados.nomina = registros.numNomina 
+                WHERE registros.fechaEntrada BETWEEN :startDate AND :endDate 
+                GROUP BY empleados.nomina, empleados.nombre, registros.numNomina) 
+            empleados 
+            GROUP BY empleados.nomina, empleados.nombre";
+
+    $statement = $bd->prepare($sql);
+
+    $statement->bindParam(':startDate', $_POST['startDate']);
+    $statement->bindParam(':endDate', $_POST['endDate']);
+    $statement->execute();
+
+    if ($statement->rowCount() >= 1) {
+        while ($row = $statement->fetch()) {
+            $array[$x]['id'] = $x;
+            $array[$x]['nomina'] = $row['nomina'];
+            $array[$x]['nombre'] = $row['nombre'];
+            $array[$x]['departamento'] = $row['departamento'];
+            $array[$x]['asistencia'] = $row['asistencia'];
+            $array[$x]['promedio'] = $row['promedio'];
+            $x++;
+        }
+        echo json_encode($array);
+    } else {
+        echo json_encode(['query' => false]);
+    }
+}
 ?>
