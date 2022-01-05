@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
 import { Button, Card, Col, Form, Row } from 'react-bootstrap'
-import '../styles/styles.css'
+import '../../styles/styles.css'
 
 export default function Login(props) {
   const URI = process.env.REACT_APP_SERVER_URL

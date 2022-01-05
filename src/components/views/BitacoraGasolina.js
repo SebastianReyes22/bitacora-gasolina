@@ -1,12 +1,12 @@
 import { React, useState } from 'react'
-import Headers from '../components/Headers'
+import Headers from '../Headers'
 import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap'
 import DatePicker from 'react-datepicker'
 import 'react-datepicker/dist/react-datepicker.css'
 import Axios from 'axios'
 import ReactHtmlTableToExcel from 'react-html-table-to-excel'
 
-export default function BitacoraGasolina() {
+export default function BitacoraGasolina(props) {
   //Cadena de conexión
   const URI = process.env.REACT_APP_SERVER_URL
 

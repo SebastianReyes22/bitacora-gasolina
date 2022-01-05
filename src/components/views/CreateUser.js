@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
-import Headers from '../components/Headers'
+import Headers from '../../components/Headers'
 import { Form, Row, Col, Card, Button } from 'react-bootstrap'
 
 export default function CreateUser() {
@@ -114,15 +114,19 @@ export default function CreateUser() {
                       aria-label="Default select example"
                     >
                       <option>Seleccionar Departamento</option>
-                      <option value="Administración">Administración</option>
-                      <option value="Almacen">Almacen</option>
-                      <option value="Calidad">Calidad</option>
-                      <option value="Facturación">Facturación</option>
-                      <option value="Finanzas">Finanzas</option>
-                      <option value="Producción">Producción</option>
-                      <option value="RH">RH</option>
-                      <option value="Sistemas">Sistemas</option>
-                      <option value="Ventas">Ventas</option>
+                      <option value="MARKETING DEPT">MARKETING DEPT</option>
+                      <option value="MAINTENANCE SECTION">MAINTENANCE SECTION</option>
+                      <option value="QUALITY CONTROL SECTION">QUALITY CONTROL SECTION</option>
+                      <option value="TRANSPORT CONTROL SECTION">TRANSPORT CONTROL SECTION</option>
+                      <option value="PRODUCTION MANAGMENT SECTION">PRODUCTION MANAGMENT SECTION</option>
+                      <option value="SALES 1 SECTION">SALES 1 SECTION</option>
+                      <option value="SALES TEAM">SALES TEAM</option>
+                      <option value="ACCOUNTING TEAM">ACCOUNTING TEAM</option>
+                      <option value="HR TEAM">HR TEAM</option>
+                      <option value="IT TEAM">IT TEAM</option>
+                      <option value="PLANT">PLANT</option>
+                      <option value="GENERAL AFFAIRS TEAM">GENERAL AFFAIRS TEAM</option>
+                      <option value="TREASURY TEAM">TREASURY TEAM</option>
                     </Form.Select>
                   </Col>
                   <Col sm="3">

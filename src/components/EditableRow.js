@@ -3,46 +3,57 @@ import { Form, Button } from 'react-bootstrap'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSave } from '@fortawesome/free-solid-svg-icons'
 
-const EditableRow = ({ userInfo }) => {
+const EditableRow = ({
+  editFormData,
+  handleEditFormChange,
+  handleEditFormSubmit,
+}) => {
   return (
     <tr>
       <td>
         <Form.Control
+          name="nomina"
           sm="6"
           type="text"
-          value={userInfo.nomina}
+          value={editFormData.nomina}
         />
       </td>
       <td>
         <Form.Control
+          name="nombre"
           sm="6"
           type="text"
-          value={userInfo.nombre}
+          value={editFormData.nombre}
         />
       </td>
       <td>
         <Form.Control
+          name="departamento"
           sm="6"
           type="text"
-          value={userInfo.departamento}
+          value={editFormData.departamento}
         />
       </td>
       <td>
         <Form.Control
+          name="asistencia"
           sm="6"
           type="text"
-          value={userInfo.asistencia}
+          value={editFormData.asistencia}
+          onChange={handleEditFormChange}
         />
       </td>
       <td>
         <Form.Control
+          name="promedio"
           sm="6"
           type="text"
-          value={userInfo.promedio}
+          value={editFormData.promedio}
+          onChange={handleEditFormChange}
         />
       </td>
       <td>
-        <Button variant="info">
+        <Button variant="info" onClick={handleEditFormSubmit}>
           <FontAwesomeIcon icon={faSave} />
         </Button>
       </td>
