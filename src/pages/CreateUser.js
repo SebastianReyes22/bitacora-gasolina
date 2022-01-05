@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import Axios from 'axios'
-import Headers from './Headers'
+import Headers from '../components/Headers'
 import { Form, Row, Col, Card, Button } from 'react-bootstrap'
 
 export default function CreateUser() {

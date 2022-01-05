@@ -1,9 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
-import CreateUser from './components/CreateUser'
-import BitacoraGasolina from './components/BitacoraGasolina'
-import Home from './components/Home'
-import Login from './components/Login'
-import Reports from './components/Reports'
+import CreateUser from './pages/CreateUser'
+import BitacoraGasolina from './pages/BitacoraGasolina'
+import Home from './pages/Home'
+import Login from './pages/Login'
+import Reports from './pages/Reports'
 import './App.css'
 
 function App() {
