@@ -14,7 +14,7 @@ export default function CreateUser() {
   //Funcion para sacar el valor del input de nomina
   const handleNomina = (e) => {
     e.preventDefault()
-    setNomina(e.target.value)
+    setNomina(e.target.value.replace(/\D/g, ''))
   }
 
   //Funcion para sacar el valor del input de nombre
@@ -31,7 +31,6 @@ export default function CreateUser() {
       reader.onload = function () {
         var base64 = reader.result
         picture = base64
-        console.log(picture)
       }
     })
   }
@@ -59,7 +58,6 @@ export default function CreateUser() {
     })
       .then((response) => {
         if (response.data.insert === true) {
-          console.log('Datos capturados correctamente')
           alert('Datos capturados correctamente')
           window.location = '/addUser'
         } else {
@@ -93,7 +91,8 @@ export default function CreateUser() {
                       type="text"
                       placeholder="Número de nomina"
                       value={nomina}
-                      onChange={handleNomina}
+                      onChange={handleNomina.bind(this)}
+                      maxLength="5"
                     />
                   </Col>
                   <Col sm="3">
@@ -115,17 +114,27 @@ export default function CreateUser() {
                     >
                       <option>Seleccionar Departamento</option>
                       <option value="MARKETING DEPT">MARKETING DEPT</option>
-                      <option value="MAINTENANCE SECTION">MAINTENANCE SECTION</option>
-                      <option value="QUALITY CONTROL SECTION">QUALITY CONTROL SECTION</option>
-                      <option value="TRANSPORT CONTROL SECTION">TRANSPORT CONTROL SECTION</option>
-                      <option value="PRODUCTION MANAGMENT SECTION">PRODUCTION MANAGMENT SECTION</option>
+                      <option value="MAINTENANCE SECTION">
+                        MAINTENANCE SECTION
+                      </option>
+                      <option value="QUALITY CONTROL SECTION">
+                        QUALITY CONTROL SECTION
+                      </option>
+                      <option value="TRANSPORT CONTROL SECTION">
+                        TRANSPORT CONTROL SECTION
+                      </option>
+                      <option value="PRODUCTION MANAGMENT SECTION">
+                        PRODUCTION MANAGMENT SECTION
+                      </option>
                       <option value="SALES 1 SECTION">SALES 1 SECTION</option>
                       <option value="SALES TEAM">SALES TEAM</option>
                       <option value="ACCOUNTING TEAM">ACCOUNTING TEAM</option>
                       <option value="HR TEAM">HR TEAM</option>
                       <option value="IT TEAM">IT TEAM</option>
                       <option value="PLANT">PLANT</option>
-                      <option value="GENERAL AFFAIRS TEAM">GENERAL AFFAIRS TEAM</option>
+                      <option value="GENERAL AFFAIRS TEAM">
+                        GENERAL AFFAIRS TEAM
+                      </option>
                       <option value="TREASURY TEAM">TREASURY TEAM</option>
                     </Form.Select>
                   </Col>
@@ -134,6 +143,7 @@ export default function CreateUser() {
                     <Form.Control
                       type="file"
                       size="mg"
+                      accept='.jpg, .png, .jpeg'
                       onChange={(e) => convertToBase64(e.target.files)}
                     />
                   </Col>

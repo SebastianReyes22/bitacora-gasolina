@@ -30,7 +30,7 @@ export default function Headers() {
                 {' '}
                 👤 Agregar usuario
               </NavDropdown.Item>
-              <NavDropdown.Item href="#action/3.3">
+              <NavDropdown.Item href="/eliminarUsuario">
                 {' '}
                 ☠️ Eliminar usuario
               </NavDropdown.Item>

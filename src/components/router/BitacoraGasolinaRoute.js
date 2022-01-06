@@ -5,7 +5,7 @@ export default function BitacoraGasolinaRoute(props){
   const isAuthenticated = false
 
   if (!isAuthenticated) {
-    return <Navigate to="/login" />
+    return window.location = './login'
   }
 
   return <Route {...props} />

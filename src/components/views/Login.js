@@ -8,7 +8,6 @@ export default function Login(props) {
 
   const [userName, setUserName] = useState('')
   const [passwordUser, setPasswordUser] = useState('')
-
   const handleChangeUser = (e) => {
     e.preventDefault()
     setUserName(e.target.value)
@@ -32,10 +31,10 @@ export default function Login(props) {
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
-        if (response.data.login === true) {
-          window.location = '/home'
-        } else {
+        if (!response.data.login) {
           alert('Usuario no registrado, comuniquese con el administrador')
+        } else {
+          console.log(response.data)
         }
       })
       .catch((error) => {

@@ -14,7 +14,7 @@ const EditableRow = ({
         <Form.Control
           name="nomina"
           sm="6"
-          type="text"
+          type="number"
           value={editFormData.nomina}
         />
       </td>
@@ -41,6 +41,7 @@ const EditableRow = ({
           type="text"
           value={editFormData.asistencia}
           onChange={handleEditFormChange}
+          maxLength="2"
         />
       </td>
       <td>

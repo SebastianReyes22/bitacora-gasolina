@@ -12,7 +12,7 @@ export default function Home(props) {
 
   const handleChangeNomina = (e) => {
     e.preventDefault()
-    setNumNomina(e.target.value)
+    setNumNomina(e.target.value.replace(/\D/g, ''))
   }
 
   const handleSubmit = async () => {
@@ -64,8 +64,9 @@ export default function Home(props) {
                   <Form.Control
                     type="text"
                     value={nomina}
-                    onChange={handleChangeNomina}
+                    onChange={handleChangeNomina.bind(this)}
                     placeholder="12345"
+                    maxLength="5"
                   />
                 </Col>
               </Form.Group>

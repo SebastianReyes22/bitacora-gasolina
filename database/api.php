@@ -12,8 +12,10 @@ try {
 
 //LOGIN
 if ($_POST['option'] == 'loginQuery') {
-    $sql =
-        "SELECT * FROM usuarios WHERE userName = :userName AND passwordUser = :passwordUser";
+    $array = [];
+    $x = 0;
+
+    $sql = "SELECT * FROM usuarios WHERE userName = :userName AND passwordUser = :passwordUser";
     $statement = $bd->prepare($sql);
 
     $statement->bindParam(':userName', $_POST['userName']);
@@ -21,7 +23,13 @@ if ($_POST['option'] == 'loginQuery') {
     $statement->execute();
 
     if ($statement->rowCount() >= 1) {
-        echo json_encode(['login' => true]);
+        while ($row = $statement->fetch()) {
+            $array[$x]['id'] = $x;
+            $array[$x]['userName'] = $row['userName'];
+            $array[$x]['passwordUser'] = $row['passwordUser'];
+            $x++;
+        }
+        echo json_encode($array);
     } else {
         echo json_encode(['login' => false]);
     }
@@ -150,4 +158,48 @@ if ($_POST['option'] == 'getReports') {
         echo json_encode(['query' => false]);
     }
 }
+
+//DELETE USER
+if ($_POST['option'] == 'deleteUser') {
+    $sql ="DELETE FROM empleados WHERE nomina = :nomina";
+    $statement = $bd->prepare($sql);
+
+    $statement->bindParam(':nomina', $_POST['nomina']);
+    $statement->execute();
+
+    if ($statement->rowCount() >= 1) {
+        echo json_encode(['delete' => true]);
+    } else {
+        echo json_encode(['delete' => false]);
+    }
+}
+
+//Buscar usuario para eliminar
+if ($_POST['option'] == 'selectUserDelete') {
+    $array = [];
+    $x = 0;
+
+    $sql = "SELECT * FROM empleados WHERE nomina LIKE CONCAT('%', :nomina '%') AND nombre LIKE CONCAT('%', :userName, '%') AND departamento LIKE CONCAT('%', :department, '%') ORDER BY nomina";
+
+    $statement = $bd->prepare($sql);
+
+    $statement->bindParam(':nomina', $_POST['nomina']);
+    $statement->bindParam(':userName', $_POST['userName']);
+    $statement->bindParam(':department', $_POST['department']);
+    $statement->execute();
+
+    if ($statement->rowCount() >= 1) {
+        while ($row = $statement->fetch()) {
+            $array[$x]['id'] = $x;
+            $array[$x]['nomina'] = $row['nomina'];
+            $array[$x]['nombre'] = $row['nombre'];
+            $array[$x]['departamento'] = $row['departamento'];
+            $x++;
+        }
+        echo json_encode($array);
+    } else {
+        echo json_encode(['userDelete' => false]);
+    }
+}
+
 ?>

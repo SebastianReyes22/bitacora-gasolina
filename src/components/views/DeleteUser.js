@@ -1,34 +1,20 @@
-import { React, useState } from 'react'
+import React, { useState } from 'react'
+import axios from 'axios'
 import Headers from '../Headers'
-import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import Axios from 'axios'
-import ReactHtmlTableToExcel from 'react-html-table-to-excel'
+import { Form, Row, Col, Card, Button, Table } from 'react-bootstrap'
+import DeleteRow from '../DeleteRow'
 
-export default function BitacoraGasolina(props) {
+const DeleteUser = () => {
   //Cadena de conexión
   const URI = process.env.REACT_APP_SERVER_URL
 
-  //Variables de los imput que se mandan a la api
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
   const [nomina, setNomina] = useState('')
   const [userName, setUserName] = useState('')
   const [department, setDepartment] = useState('')
 
-  //Variables para mostrar en la tabla
   const [userData, setUserData] = useState([])
-
-  //Funcion que cambia el valor de lafecha de inicio
-  const handleChangeStartDate = (date) => {
-    setStartDate(date)
-  }
-
-  //Funcion que cambia el valor de la fecha final
-  const handleChangeEndDate = (date) => {
-    setEndDate(date)
-  }
+  const [editFormData, setEditFormData] = useState([]) //Constante que guarda el data de la api para editar
+  const [editUserId, setEditUserId] = useState(null)
 
   //Funcion que cambia el valor del input nomina
   const handleChangeNomina = (e) => {
@@ -49,25 +35,23 @@ export default function BitacoraGasolina(props) {
   }
 
   //Consulta de información seleccionada
-  const handleSubmit = async () => {
+  const handleSubmitGetInfo = async () => {
     let formData = new FormData()
-    formData.append('option', 'selectUser')
-    formData.append('startDate', startDate.toJSON())
-    formData.append('endDate', endDate.toJSON())
+    formData.append('option', 'selectUserDelete')
     formData.append('nomina', nomina)
     formData.append('userName', userName)
     formData.append('department', department)
 
-    await Axios({
+    await axios({
       method: 'POST',
       url: URI,
       data: formData,
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then((response) => {
-        if (response.data.user === false) {
+        if (response.data.userDelete === false) {
           alert('Registros no encontrados')
-          window.location = './bitacora-gasolina'
+          window.location = './eliminarUsuario'
         } else {
           console.log(response.data)
           setUserData(response.data)
@@ -78,10 +62,53 @@ export default function BitacoraGasolina(props) {
       })
   }
 
+  const handleSubmitDelete = async (userInfo) => {
+    let formData = new FormData()
+    formData.append('option', 'deleteUser')
+    formData.append('nomina', userInfo.nomina)
+
+    await axios({
+      method: 'POST',
+      url: URI,
+      data: formData,
+      config: { headers: { 'Content-Type': 'multipart/form-data' } },
+    })
+      .then((response) => {
+        if (!response.data.delete) {
+          alert('Eror comuniquese con el administrador')
+          window.location = './eliminarUsuario'
+        } else {
+          alert('Usuario eliminado correctamente')
+          window.location = './eliminarUsuario'
+        }
+      })
+      .catch((error) => {
+        console.log('Error en el servidor', error)
+      })
+  }
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './bitacora-gasolina'
+      window.location = './eliminarUsuario'
+    }
+  }
+
+  const handleDeleteClick = (e, userInfo) => {
+    if (window.confirm('¿Realmente quieres limpiar la tabla?')) {
+      e.preventDefault()
+      setEditUserId(userInfo.id)
+  
+      const formValues = {
+        id: editUserId,
+        nomina: userInfo.nomina,
+        nombre: userInfo.nombre,
+        departamento: userInfo.departamento,
+        asistencia: userInfo.asistencia,
+        promedio: userInfo.promedio,
+      }
+      setEditFormData(formValues)
+      console.log(userInfo.nombre)
+      handleSubmitDelete(userInfo)
     }
   }
 
@@ -91,63 +118,9 @@ export default function BitacoraGasolina(props) {
       <Row className="App-header">
         <Col className="mt-5">
           <Card className="card-style">
-            <Card.Header className="titleLogin">Generar bitácora</Card.Header>
+            <Card.Header className="titleLogin">Eliminar Usuario</Card.Header>
             <Card.Body>
               <Form>
-                <Form.Group as={Row} className="mb-3" controlId="formFechas">
-                  <Col sm="3">
-                    <Form.Label column>Fecha de inicio</Form.Label>
-                    <DatePicker
-                      dateFormat="yyyy/MM/dd"
-                      selected={startDate}
-                      onChange={handleChangeStartDate}
-                    />
-                  </Col>
-                  <Col sm="3">
-                    <Form.Label column>Fecha de termino</Form.Label>
-                    <DatePicker
-                      dateFormat="yyyy/MM/dd"
-                      selected={endDate}
-                      onChange={handleChangeEndDate}
-                    />
-                  </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
-                      <Button
-                        onClick={handleSubmit}
-                        className="mt-4"
-                        variant="primary"
-                        size="lg"
-                      >
-                        Buscar
-                      </Button>
-                    </div>
-                  </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
-                      <ReactHtmlTableToExcel
-                        id="btnExportExcel"
-                        className="btn btn-success mt-4 btn-lg"
-                        table="tableInfoUsers"
-                        filename="bitácoragasolina"
-                        sheet="Hoja 1"
-                        buttonText="Descargar"
-                      />
-                    </div>
-                  </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
-                      <Button
-                        className="mt-4"
-                        variant="danger"
-                        size="lg"
-                        onClick={handleClean}
-                      >
-                        Limpiar
-                      </Button>
-                    </div>
-                  </Col>
-                </Form.Group>
                 <Form.Group
                   as={Row}
                   controlId="formPlaintextNomina"
@@ -176,7 +149,6 @@ export default function BitacoraGasolina(props) {
                   </Col>
                   <Col sm="4">
                     <Form.Label>Departamento</Form.Label>
-
                     <Form.Select
                       sm="6"
                       type="text"
@@ -211,26 +183,48 @@ export default function BitacoraGasolina(props) {
                     </Form.Select>
                   </Col>
                 </Form.Group>
+                <Form.Group as={Row} className="mb-3" controlId="formFechas">
+                  <Col sm="8" />
+                  <Col sm="2">
+                    <div className="d-grid gap-2">
+                      <Button
+                        className="mt-2"
+                        variant="primary"
+                        size="lg"
+                        onClick={handleSubmitGetInfo}
+                      >
+                        Buscar
+                      </Button>
+                    </div>
+                  </Col>
+                  <Col sm="2">
+                    <div className="d-grid gap-2">
+                      <Button
+                        className="mt-2"
+                        variant="danger"
+                        size="lg"
+                        onClick={handleClean}
+                      >
+                        Limpiar
+                      </Button>
+                    </div>
+                  </Col>
+                </Form.Group>
                 <Table striped bordered hover id="tableInfoUsers">
                   <thead>
                     <tr>
                       <th>Nómina</th>
-                      <th>Departamento</th>
                       <th>Nombre</th>
-                      <th>Fecha de entrada</th>
-                      <th>Fecha de salida</th>
+                      <th>Departamento</th>
                     </tr>
                   </thead>
                   <tbody>
                     {userData &&
                       userData.map((userInfo) => (
-                        <tr key={userInfo.id}>
-                          <td>{userInfo.nomina}</td>
-                          <td>{userInfo.departamento}</td>
-                          <td>{userInfo.nombre}</td>
-                          <td>{userInfo.fechaEntrada}</td>
-                          <td>{userInfo.fechaSalida}</td>
-                        </tr>
+                        <DeleteRow
+                          userInfo={userInfo}
+                          handleDeleteClick={handleDeleteClick}
+                        />
                       ))}
                   </tbody>
                 </Table>
@@ -242,3 +236,5 @@ export default function BitacoraGasolina(props) {
     </>
   )
 }
+
+export default DeleteUser
