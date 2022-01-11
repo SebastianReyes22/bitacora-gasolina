@@ -12,8 +12,6 @@ try {
 
 //LOGIN
 if ($_POST['option'] == 'loginQuery') {
-    $array = [];
-    $x = 0;
 
     $sql = "SELECT * FROM usuarios WHERE userName = :userName AND passwordUser = :passwordUser";
     $statement = $bd->prepare($sql);
@@ -23,13 +21,7 @@ if ($_POST['option'] == 'loginQuery') {
     $statement->execute();
 
     if ($statement->rowCount() >= 1) {
-        while ($row = $statement->fetch()) {
-            $array[$x]['id'] = $x;
-            $array[$x]['userName'] = $row['userName'];
-            $array[$x]['passwordUser'] = $row['passwordUser'];
-            $x++;
-        }
-        echo json_encode($array);
+        echo json_encode(['login' => true]);
     } else {
         echo json_encode(['login' => false]);
     }

@@ -1,32 +1,32 @@
-import { Fragment, React, useState } from 'react'
-import Axios from 'axios'
-import Headers from '../Headers'
-import { Button, Card, Col, Form, Row, Table } from 'react-bootstrap'
-import ReadOnlyRow from '../ReadOnlyRow'
-import EditableRow from '../EditableRow'
-import ReactHtmlTableToExcel from 'react-html-table-to-excel'
+import { Fragment, React, useState } from 'react';
+import Axios from 'axios';
+import Headers from '../Headers';
+import { Button, Card, Col, Form, Row, Table } from 'react-bootstrap';
+import ReadOnlyRow from '../ReadOnlyRow';
+import EditableRow from '../EditableRow';
+import ReactHtmlTableToExcel from 'react-html-table-to-excel';
 
 export default function Reports() {
   //Cadena de conexión
-  const URI = process.env.REACT_APP_SERVER_URL
+  const URI = process.env.REACT_APP_SERVER_URL;
 
-  const date = new Date()
-  const currentMonth = date.toLocaleString('es-MX', { month: 'long' }) //Obtiene el mes en curso
-  const firstDate = new Date(date.getFullYear(), date.getMonth(), 1) //Obtiene el primer día del mes en curso
-  const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0) //Obtiene el último día del mes en curso
-  
-  const fileName = "Reporte de asistencia " + currentMonth.toString() //Nombre del archivo de excel
+  const date = new Date();
+  const currentMonth = date.toLocaleString('es-MX', { month: 'long' }); //Obtiene el mes en curso
+  const firstDate = new Date(date.getFullYear(), date.getMonth(), 1); //Obtiene el primer día del mes en curso
+  const lastDate = new Date(date.getFullYear(), date.getMonth() + 1, 0); //Obtiene el último día del mes en curso
 
-  const [userData, setUserData] = useState([]) //Constante que guarda el data de la api
-  const [editFormData, setEditFormData] = useState([]) //Constante que guarda el data de la api para editar
-  const [editUserId, setEditUserId] = useState(null)
+  const fileName = 'Reporte de asistencia ' + currentMonth.toString(); //Nombre del archivo de excel
+
+  const [userData, setUserData] = useState([]); //Constante que guarda el data de la api
+  const [editFormData, setEditFormData] = useState([]); //Constante que guarda el data de la api para editar
+  const [editUserId, setEditUserId] = useState(null);
 
   //Petición de axios a la api
   const handleSubmit = async () => {
-    let formData = new FormData()
-    formData.append('option', 'getReports')
-    formData.append('startDate', firstDate.toJSON())
-    formData.append('endDate', lastDate.toJSON())
+    let formData = new FormData();
+    formData.append('option', 'getReports');
+    formData.append('startDate', firstDate.toJSON());
+    formData.append('endDate', lastDate.toJSON());
 
     await Axios({
       method: 'POST',
@@ -34,23 +34,23 @@ export default function Reports() {
       data: formData,
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
-      .then((response) => {
+      .then(response => {
         if (!response.data.user) {
-          alert('Registros no encontrados')
-          window.location = './reportes'
+          alert('Registros no encontrados');
+          window.location = './reportes';
         } else {
-          setUserData(response.data)
+          setUserData(response.data);
         }
       })
-      .catch((error) => {
-        console.log('Error en el servidor', error)
-      })
-  }
+      .catch(error => {
+        console.log('Error en el servidor', error);
+      });
+  };
 
   //Función que guarda el estado en el form para editar
   const handleEditClick = (e, userInfo) => {
-    e.preventDefault()
-    setEditUserId(userInfo.id)
+    e.preventDefault();
+    setEditUserId(userInfo.id);
 
     const formValues = {
       nomina: userInfo.nomina,
@@ -58,25 +58,25 @@ export default function Reports() {
       departamento: userInfo.departamento,
       asistencia: userInfo.asistencia,
       promedio: userInfo.promedio,
-    }
-    setEditFormData(formValues)
-  }
+    };
+    setEditFormData(formValues);
+  };
 
   //Función que cambia la fila seleccionada en la tabla para poder editar
-  const handleEditFormChange = (e) => {
-    e.preventDefault()
+  const handleEditFormChange = e => {
+    e.preventDefault();
 
-    const fieldName = e.target.getAttribute('name')
-    const fieldValue = e.target.value
-    const newFormData = { ...editFormData }
-    newFormData[fieldName] = fieldValue
+    const fieldName = e.target.getAttribute('name');
+    const fieldValue = e.target.value;
+    const newFormData = { ...editFormData };
+    newFormData[fieldName] = fieldValue;
 
-    setEditFormData(newFormData)
-  }
+    setEditFormData(newFormData);
+  };
 
   //Función que guarda los cambios editados en la tabla
-  const handleEditFormSubmit = (e) => {
-    e.preventDefault()
+  const handleEditFormSubmit = e => {
+    e.preventDefault();
 
     const editedUser = {
       id: editUserId,
@@ -85,67 +85,65 @@ export default function Reports() {
       departamento: editFormData.departamento,
       asistencia: editFormData.asistencia,
       promedio: editFormData.promedio,
-    }
+    };
 
-    const newUserData = [...userData]
-    const index = userData.findIndex((userInfo) => userInfo.id === editUserId)
-    newUserData[index] = editedUser
-    setUserData(newUserData)
-    setEditUserId(null)
-  }
+    const newUserData = [...userData];
+    const index = userData.findIndex(userInfo => userInfo.id === editUserId);
+    newUserData[index] = editedUser;
+    setUserData(newUserData);
+    setEditUserId(null);
+  };
 
   const handleSubmitClean = () => {
     if (window.confirm('¿Realmente quieres limpiar la tabla?')) {
-      window.location = './reportes'
+      window.location = './reportes';
     }
-  }
+  };
 
   return (
     <>
       <Headers />
-      <Row className="App-header-home">
-        <Col className="mt-5">
-          <Card className="card-style">
-            <Card.Header className="titleLogin">Reporte mensual</Card.Header>
+      <Row className='App-header-home'>
+        <Col className='mt-5'>
+          <Card className='card-style'>
+            <Card.Header className='titleLogin'>Reporte mensual</Card.Header>
             <Card.Body>
               <Form>
-                <Form.Group as={Row} className="mb-3" controlId="formFechas">
-                  <Col sm="6">
-                    <div className="d-grid gap-2">
+                <Form.Group as={Row} className='mb-3' controlId='formFechas'>
+                  <Col sm='6'>
+                    <div className='d-grid gap-2'>
                       <Button
-                        variant="primary"
-                        size="lg"
-                        onClick={handleSubmit}
-                      >
+                        variant='primary'
+                        size='lg'
+                        onClick={handleSubmit}>
                         Consultar reporte de {currentMonth}
                       </Button>
                     </div>
                   </Col>
-                  <Col sm="3">
-                    <div className="d-grid gap-2">
+                  <Col sm='3'>
+                    <div className='d-grid gap-2'>
                       <ReactHtmlTableToExcel
-                        id="btnExportExcel"
-                        className="btn btn-success btn-lg"
-                        table="tableInfoUsers"
+                        id='btnExportExcel'
+                        className='btn btn-success btn-lg'
+                        table='tableInfoUsers'
                         filename={fileName}
-                        sheet="Hoja 1"
-                        buttonText="Descargar"
+                        sheet='Hoja 1'
+                        buttonText='Descargar'
                       />
                     </div>
                   </Col>
-                  <Col sm="3">
-                  <div className="d-grid gap-2">
+                  <Col sm='3'>
+                    <div className='d-grid gap-2'>
                       <Button
-                        variant="danger"
-                        size="lg"
-                        onClick={handleSubmitClean}
-                      >
+                        variant='danger'
+                        size='lg'
+                        onClick={handleSubmitClean}>
                         Limpiar
                       </Button>
                     </div>
                   </Col>
                 </Form.Group>
-                <Table striped bordered hover id="tableInfoUsers">
+                <Table striped bordered hover id='tableInfoUsers'>
                   <thead>
                     <tr>
                       <th>Nómina</th>
@@ -157,7 +155,7 @@ export default function Reports() {
                   </thead>
                   <tbody>
                     {userData &&
-                      userData.map((userInfo) => (
+                      userData.map(userInfo => (
                         <Fragment>
                           {editUserId === userInfo.id ? (
                             <EditableRow
@@ -181,5 +179,5 @@ export default function Reports() {
         </Col>
       </Row>
     </>
-  )
+  );
 }

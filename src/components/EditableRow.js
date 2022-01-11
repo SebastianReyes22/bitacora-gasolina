@@ -1,7 +1,7 @@
-import { React } from 'react'
-import { Form, Button } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSave } from '@fortawesome/free-solid-svg-icons'
+import { React } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSave } from '@fortawesome/free-solid-svg-icons';
 
 const EditableRow = ({
   editFormData,
@@ -12,54 +12,54 @@ const EditableRow = ({
     <tr>
       <td>
         <Form.Control
-          name="nomina"
-          sm="6"
-          type="number"
+          name='nomina'
+          sm='6'
+          type='number'
           value={editFormData.nomina}
         />
       </td>
       <td>
         <Form.Control
-          name="nombre"
-          sm="6"
-          type="text"
+          name='nombre'
+          sm='6'
+          type='text'
           value={editFormData.nombre}
         />
       </td>
       <td>
         <Form.Control
-          name="departamento"
-          sm="6"
-          type="text"
+          name='departamento'
+          sm='6'
+          type='text'
           value={editFormData.departamento}
         />
       </td>
       <td>
         <Form.Control
-          name="asistencia"
-          sm="6"
-          type="text"
+          name='asistencia'
+          sm='6'
+          type='text'
           value={editFormData.asistencia}
           onChange={handleEditFormChange}
-          maxLength="2"
+          maxLength='2'
         />
       </td>
       <td>
         <Form.Control
-          name="promedio"
-          sm="6"
-          type="text"
+          name='promedio'
+          sm='6'
+          type='text'
           value={editFormData.promedio}
           onChange={handleEditFormChange}
         />
       </td>
       <td>
-        <Button variant="info" onClick={handleEditFormSubmit}>
+        <Button variant='info' onClick={handleEditFormSubmit}>
           <FontAwesomeIcon icon={faSave} />
         </Button>
       </td>
     </tr>
-  )
-}
+  );
+};
 
-export default EditableRow
+export default EditableRow;

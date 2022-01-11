@@ -1,62 +1,62 @@
-import { React, useState } from 'react'
-import Headers from '../Headers'
-import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap'
-import DatePicker from 'react-datepicker'
-import 'react-datepicker/dist/react-datepicker.css'
-import Axios from 'axios'
-import ReactHtmlTableToExcel from 'react-html-table-to-excel'
+import { React, useState } from 'react';
+import Headers from '../Headers';
+import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import Axios from 'axios';
+import ReactHtmlTableToExcel from 'react-html-table-to-excel';
 
 export default function BitacoraGasolina(props) {
   //Cadena de conexión
-  const URI = process.env.REACT_APP_SERVER_URL
+  const URI = process.env.REACT_APP_SERVER_URL;
 
   //Variables de los imput que se mandan a la api
-  const [startDate, setStartDate] = useState(new Date())
-  const [endDate, setEndDate] = useState(new Date())
-  const [nomina, setNomina] = useState('')
-  const [userName, setUserName] = useState('')
-  const [department, setDepartment] = useState('')
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  const [nomina, setNomina] = useState('');
+  const [userName, setUserName] = useState('');
+  const [department, setDepartment] = useState('');
 
   //Variables para mostrar en la tabla
-  const [userData, setUserData] = useState([])
+  const [userData, setUserData] = useState([]);
 
   //Funcion que cambia el valor de lafecha de inicio
-  const handleChangeStartDate = (date) => {
-    setStartDate(date)
-  }
+  const handleChangeStartDate = date => {
+    setStartDate(date);
+  };
 
   //Funcion que cambia el valor de la fecha final
-  const handleChangeEndDate = (date) => {
-    setEndDate(date)
-  }
+  const handleChangeEndDate = date => {
+    setEndDate(date);
+  };
 
   //Funcion que cambia el valor del input nomina
-  const handleChangeNomina = (e) => {
-    e.preventDefault()
-    setNomina(e.target.value.replace(/\D/g, ''))
-  }
+  const handleChangeNomina = e => {
+    e.preventDefault();
+    setNomina(e.target.value.replace(/\D/g, ''));
+  };
 
   //Funcion que cambia el valor del input nombre
-  const handleChangeUserName = (e) => {
-    e.preventDefault()
-    setUserName(e.target.value)
-  }
+  const handleChangeUserName = e => {
+    e.preventDefault();
+    setUserName(e.target.value);
+  };
 
   //Funcion que cambia el valor del input departamento
-  const handleChangeDepartment = (e) => {
-    e.preventDefault()
-    setDepartment(e.target.value)
-  }
+  const handleChangeDepartment = e => {
+    e.preventDefault();
+    setDepartment(e.target.value);
+  };
 
   //Consulta de información seleccionada
   const handleSubmit = async () => {
-    let formData = new FormData()
-    formData.append('option', 'selectUser')
-    formData.append('startDate', startDate.toJSON())
-    formData.append('endDate', endDate.toJSON())
-    formData.append('nomina', nomina)
-    formData.append('userName', userName)
-    formData.append('department', department)
+    let formData = new FormData();
+    formData.append('option', 'selectUser');
+    formData.append('startDate', startDate.toJSON());
+    formData.append('endDate', endDate.toJSON());
+    formData.append('nomina', nomina);
+    formData.append('userName', userName);
+    formData.append('department', department);
 
     await Axios({
       method: 'POST',
@@ -64,85 +64,83 @@ export default function BitacoraGasolina(props) {
       data: formData,
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
-      .then((response) => {
+      .then(response => {
         if (response.data.user === false) {
-          alert('Registros no encontrados')
-          window.location = './bitacora-gasolina'
+          alert('Registros no encontrados');
+          window.location = './bitacora-gasolina';
         } else {
-          console.log(response.data)
-          setUserData(response.data)
+          console.log(response.data);
+          setUserData(response.data);
         }
       })
-      .catch((error) => {
-        console.log('Error en el servidor', error)
-      })
-  }
+      .catch(error => {
+        console.log('Error en el servidor', error);
+      });
+  };
 
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './bitacora-gasolina'
+      window.location = './bitacora-gasolina';
     }
-  }
+  };
 
   return (
     <>
       <Headers />
-      <Row className="App-header">
-        <Col className="mt-5">
-          <Card className="card-style">
-            <Card.Header className="titleLogin">Generar bitácora</Card.Header>
+      <Row className='App-header'>
+        <Col className='mt-5'>
+          <Card className='card-style'>
+            <Card.Header className='titleLogin'>Generar bitácora</Card.Header>
             <Card.Body>
               <Form>
-                <Form.Group as={Row} className="mb-3" controlId="formFechas">
-                  <Col sm="3">
+                <Form.Group as={Row} className='mb-3' controlId='formFechas'>
+                  <Col sm='3'>
                     <Form.Label column>Fecha de inicio</Form.Label>
                     <DatePicker
-                      dateFormat="yyyy/MM/dd"
+                      dateFormat='yyyy/MM/dd'
                       selected={startDate}
                       onChange={handleChangeStartDate}
                     />
                   </Col>
-                  <Col sm="3">
+                  <Col sm='3'>
                     <Form.Label column>Fecha de termino</Form.Label>
                     <DatePicker
-                      dateFormat="yyyy/MM/dd"
+                      dateFormat='yyyy/MM/dd'
                       selected={endDate}
                       onChange={handleChangeEndDate}
                     />
                   </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
+                  <Col sm='2'>
+                    <div className='d-grid gap-2'>
                       <Button
                         onClick={handleSubmit}
-                        className="mt-4"
-                        variant="primary"
-                        size="lg"
-                      >
+                        className='mt-4'
+                        variant='primary'
+                        size='lg'>
                         Buscar
                       </Button>
                     </div>
                   </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
+                  <Col sm='2'>
+                    <div className='d-grid gap-2'>
                       <ReactHtmlTableToExcel
-                        id="btnExportExcel"
-                        className="btn btn-success mt-4 btn-lg"
-                        table="tableInfoUsers"
-                        filename="bitácoragasolina"
-                        sheet="Hoja 1"
-                        buttonText="Descargar"
+                        id='btnExportExcel'
+                        className='btn btn-success mt-4 btn-lg'
+                        table='tableInfoUsers'
+                        filename='bitácoragasolina'
+                        sheet='Hoja 1'
+                        buttonText='Descargar'
                       />
                     </div>
                   </Col>
-                  <Col sm="2">
-                    <div className="d-grid gap-2">
+                  <Col sm='2'>
+                    <div className='d-grid gap-2'>
                       <Button
-                        className="mt-4"
-                        variant="danger"
-                        size="lg"
-                        onClick={handleClean}
-                      >
+                        className='mt-4'
+                        variant='danger'
+                        size='lg'
+                        onClick={handleClean}>
                         Limpiar
                       </Button>
                     </div>
@@ -150,68 +148,66 @@ export default function BitacoraGasolina(props) {
                 </Form.Group>
                 <Form.Group
                   as={Row}
-                  controlId="formPlaintextNomina"
-                  className="mb-4"
-                >
-                  <Col sm="4">
+                  controlId='formPlaintextNomina'
+                  className='mb-4'>
+                  <Col sm='4'>
                     <Form.Label>Número nomina</Form.Label>
                     <Form.Control
-                      sm="6"
-                      type="text"
+                      sm='6'
+                      type='text'
                       value={nomina}
                       onChange={handleChangeNomina.bind(this)}
-                      placeholder="Número de nomina"
-                      maxLength="5"
+                      placeholder='Número de nomina'
+                      maxLength='5'
                     />
                   </Col>
-                  <Col sm="4">
+                  <Col sm='4'>
                     <Form.Label>Nombre</Form.Label>
                     <Form.Control
-                      sm="6"
-                      type="text"
-                      placeholder="Nombre del empleado"
+                      sm='6'
+                      type='text'
+                      placeholder='Nombre del empleado'
                       value={userName}
                       onChange={handleChangeUserName}
                     />
                   </Col>
-                  <Col sm="4">
+                  <Col sm='4'>
                     <Form.Label>Departamento</Form.Label>
 
                     <Form.Select
-                      sm="6"
-                      type="text"
-                      placeholder="Nombre del departamento"
+                      sm='6'
+                      type='text'
+                      placeholder='Nombre del departamento'
                       value={department}
-                      onChange={handleChangeDepartment}
-                    >
-                      <option value="">Seleccionar Departamento</option>
-                      <option value="MARKETING DEPT">MARKETING DEPT</option>
-                      <option value="MAINTENANCE SECTION">
+                      onChange={handleChangeDepartment}>
+                      <option value=''>Seleccionar Departamento</option>
+                      <option value='MARKETING DEPT'>MARKETING DEPT</option>
+                      <option value='MAINTENANCE SECTION'>
                         MAINTENANCE SECTION
                       </option>
-                      <option value="QUALITY CONTROL SECTION">
+                      <option value='QUALITY CONTROL SECTION'>
                         QUALITY CONTROL SECTION
                       </option>
-                      <option value="TRANSPORT CONTROL SECTION">
+                      <option value='TRANSPORT CONTROL SECTION'>
                         TRANSPORT CONTROL SECTION
                       </option>
-                      <option value="PRODUCTION MANAGMENT SECTION">
+                      <option value='PRODUCTION MANAGMENT SECTION'>
                         PRODUCTION MANAGMENT SECTION
                       </option>
-                      <option value="SALES 1 SECTION">SALES 1 SECTION</option>
-                      <option value="SALES TEAM">SALES TEAM</option>
-                      <option value="ACCOUNTING TEAM">ACCOUNTING TEAM</option>
-                      <option value="HR TEAM">HR TEAM</option>
-                      <option value="IT TEAM">IT TEAM</option>
-                      <option value="PLANT">PLANT</option>
-                      <option value="GENERAL AFFAIRS TEAM">
+                      <option value='SALES 1 SECTION'>SALES 1 SECTION</option>
+                      <option value='SALES TEAM'>SALES TEAM</option>
+                      <option value='ACCOUNTING TEAM'>ACCOUNTING TEAM</option>
+                      <option value='HR TEAM'>HR TEAM</option>
+                      <option value='IT TEAM'>IT TEAM</option>
+                      <option value='PLANT'>PLANT</option>
+                      <option value='GENERAL AFFAIRS TEAM'>
                         GENERAL AFFAIRS TEAM
                       </option>
-                      <option value="TREASURY TEAM">TREASURY TEAM</option>
+                      <option value='TREASURY TEAM'>TREASURY TEAM</option>
                     </Form.Select>
                   </Col>
                 </Form.Group>
-                <Table striped bordered hover id="tableInfoUsers">
+                <Table striped bordered hover id='tableInfoUsers'>
                   <thead>
                     <tr>
                       <th>Nómina</th>
@@ -223,7 +219,7 @@ export default function BitacoraGasolina(props) {
                   </thead>
                   <tbody>
                     {userData &&
-                      userData.map((userInfo) => (
+                      userData.map(userInfo => (
                         <tr key={userInfo.id}>
                           <td>{userInfo.nomina}</td>
                           <td>{userInfo.departamento}</td>
@@ -240,5 +236,5 @@ export default function BitacoraGasolina(props) {
         </Col>
       </Row>
     </>
-  )
+  );
 }
