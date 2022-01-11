@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 
@@ -9,6 +9,8 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   const [userArea, setUserArea] = useState('');
   const [userImage, setUserImage] = useState('');
+
+  const inputName = useRef(null);
 
   const handleChangeNomina = e => {
     e.preventDefault();
@@ -31,16 +33,30 @@ export default function Home() {
           setUserName(response.data.name);
           setUserImage(response.data.picture);
           setUserArea(response.data.deparment);
+          inputName.current.focus();
+          inputName.current.select();
         } else {
           alert(
             'Empleado no encontrado en la base de datos, comuniquese con el administrador',
           );
+          inputName.current.focus();
+          inputName.current.select();
         }
       })
       .catch(error => {
         console.log('Error en el servidor', error);
       });
   };
+
+  const handleSubmitInput = e => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
+  useEffect(() => {
+    inputName.current.focus();
+  }, []);
 
   return (
     <Row className='App-header-home'>
@@ -51,7 +67,7 @@ export default function Home() {
             ⛽ BITÁCORA DE GASOLINA ⛽{' '}
           </Card.Header>
           <Card.Body>
-            <Form className=''>
+            <Form>
               <Form.Group
                 as={Row}
                 className='mb-3'
@@ -61,9 +77,11 @@ export default function Home() {
                 </Form.Label>
                 <Col sm='10'>
                   <Form.Control
+                    ref={inputName}
                     type='text'
                     value={nomina}
                     onChange={handleChangeNomina.bind(this)}
+                    onKeyDown={handleSubmitInput}
                     placeholder='12345'
                     maxLength='5'
                   />

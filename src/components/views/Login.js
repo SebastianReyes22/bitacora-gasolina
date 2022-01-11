@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import '../../styles/styles.css';
@@ -8,6 +8,7 @@ export default function Login() {
 
   const [userName, setUserName] = useState('');
   const [passwordUser, setPasswordUser] = useState('');
+  const inputName = useRef(null);
 
   const handleChangeUser = e => {
     e.preventDefault();
@@ -44,6 +45,16 @@ export default function Login() {
       });
   };
 
+  const handleSubmitInput = e => {
+    if (e.key === 'Enter') {
+      handleSubmit();
+    }
+  };
+
+  useEffect(() => {
+    inputName.current.focus();
+  }, []);
+
   return (
     <Row className='App-header-home'>
       <Col className='col-sm-4 mt-5'>
@@ -54,6 +65,7 @@ export default function Login() {
               <Form.Group className='mb-3' controlId='formBasicEmail'>
                 <Form.Label> 👤 Usuario</Form.Label>
                 <Form.Control
+                  ref={inputName}
                   type='text'
                   placeholder='Nombre de usuario'
                   value={userName}
@@ -67,6 +79,7 @@ export default function Login() {
                   placeholder='Password'
                   value={passwordUser}
                   onChange={handleChangePassword}
+                  onKeyDown={handleSubmitInput}
                 />
               </Form.Group>
               <div className='d-grid gap-2'>
