@@ -68,14 +68,11 @@ export default function Home() {
           </Card.Header>
           <Card.Body>
             <Form>
-              <Form.Group
-                as={Row}
-                className='mb-3'
-                controlId='formPlaintextNomina'>
+              <Form.Group as={Row} className='mb-3'>
                 <Form.Label column sm='2'>
                   Número de nomina
                 </Form.Label>
-                <Col sm='10'>
+                <Col sm='9'>
                   <Form.Control
                     ref={inputName}
                     type='text'
@@ -85,6 +82,9 @@ export default function Home() {
                     placeholder='12345'
                     maxLength='5'
                   />
+                </Col>
+                <Col sm='1'>
+                  <Form.Control type='text' className='hiddenForm' />
                 </Col>
               </Form.Group>
             </Form>

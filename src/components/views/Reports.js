@@ -35,7 +35,7 @@ export default function Reports() {
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then(response => {
-        if (!response.data.user) {
+        if (response.data.user===false) {
           alert('Registros no encontrados');
           window.location = './reportes';
         } else {

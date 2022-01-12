@@ -1,6 +1,5 @@
 .login {
   position: absolute;
-  
   background: #354057;
 }
 
@@ -30,4 +29,11 @@
   font-size: 24px;
   text-align: center;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+}
+
+.hiddenForm {
+  width: 1%;
+  height: 1%;
+  background-color: #2b2e3d;
+  border-color: #2b2e3d;
 }
