@@ -10,41 +10,38 @@ export default function Headers() {
       variant='dark'
       className='card-style'>
       <Container>
-        <Navbar.Brand href='/bitacora-gasolina'>
-          {' '}
-          ⛽ Bitácoras Gasolina
-        </Navbar.Brand>
+        <Navbar.Brand href='./bitacoras'> ⛽ Bitácoras Gasolina</Navbar.Brand>
         <Navbar.Toggle aria-controls='responsive-navbar-nav' />
         <Navbar.Collapse id='responsive-navbar-nav'>
           <Nav className='me-auto'>
-            <Nav.Link href='/bitacora-gasolina'> 🏠 Inicio</Nav.Link>
+            <Nav.Link href='./bitacoras'> 🏠 Inicio</Nav.Link>
             <NavDropdown title=' 🔧 Herramientas' id='collasible-nav-dropdown'>
-              <NavDropdown.Item href='/reportes'>
+              <NavDropdown.Item href='./reportes'>
                 {' '}
                 📁 Generar Reporte
               </NavDropdown.Item>
-              <NavDropdown.Item href='/bitacora-gasolina'>
+              <NavDropdown.Item href='./bitacoras'>
                 {' '}
                 📁 Generar Bitácora
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href='/addUser'>
+              <NavDropdown.Item href='./agregarUsuario'>
                 {' '}
                 👤 Agregar usuario
               </NavDropdown.Item>
-              <NavDropdown.Item href='/eliminarUsuario'>
+              <NavDropdown.Item href='./eliminarUsuario'>
                 {' '}
                 ☠️ Eliminar usuario
               </NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href='/home'>
+              <NavDropdown.Item href='./inicio'>
                 {' '}
                 ⛽ Sistema Caseta
               </NavDropdown.Item>
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link eventKey={2} href='/login'>
+            <Nav.Link eventKey={2} href='./login'>
               ❌ Cerrar Sesión
             </Nav.Link>
           </Nav>

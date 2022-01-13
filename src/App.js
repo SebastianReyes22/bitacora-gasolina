@@ -9,13 +9,13 @@ import './App.css';
 
 function App() {
   return (
-    <BrowserRouter>
+    <BrowserRouter basename='/bitacora-gasolina'>
       <Routes>
         <Route exact path='/' element={<Login />} />
         <Route exact path='/login' element={<Login />} />
-        <Route exact path='/home' element={<Home />} />
-        <Route exact path='/bitacora-gasolina' element={<BitacoraGasolina />} />
-        <Route exact path='/addUser' element={<CreateUser />} />
+        <Route exact path='/inicio' element={<Home />} />
+        <Route exact path='/bitacoras' element={<BitacoraGasolina />} />
+        <Route exact path='/agregarUsuario' element={<CreateUser />} />
         <Route exact path='/reportes' element={<Reports />} />
         <Route exact path='/eliminarUsuario' element={<DeleteUser />} />
       </Routes>

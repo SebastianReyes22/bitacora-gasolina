@@ -59,7 +59,7 @@ export default function CreateUser() {
       .then(response => {
         if (response.data.insert === true) {
           alert('Datos capturados correctamente');
-          window.location = '/addUser';
+          window.location = './agregarUsuario';
         } else {
           alert('Err, comuniquese con el administrador');
         }
@@ -71,7 +71,7 @@ export default function CreateUser() {
 
   //Funcion que limpa todos los imput a su valor por defecto
   const handleRefresh = () => {
-    window.location = '/addUser';
+    window.location = './agregarUsuario';
   };
 
   return (

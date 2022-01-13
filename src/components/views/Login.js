@@ -37,7 +37,7 @@ export default function Login() {
           alert('Usuario no registrado, comuniquese con el administrador');
         } else {
           console.log(response.data);
-          window.location = '/bitacora-gasolina';
+          window.location = './bitacoras';
         }
       })
       .catch(error => {

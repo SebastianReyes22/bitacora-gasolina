@@ -67,7 +67,7 @@ export default function BitacoraGasolina(props) {
       .then(response => {
         if (response.data.user === false) {
           alert('Registros no encontrados');
-          window.location = './bitacora-gasolina';
+          window.location = './bitacoras';
         } else {
           console.log(response.data);
           setUserData(response.data);
@@ -81,7 +81,7 @@ export default function BitacoraGasolina(props) {
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './bitacora-gasolina';
+      window.location = './bitacoras';
     }
   };
 
