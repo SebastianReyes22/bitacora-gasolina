@@ -5,7 +5,7 @@ import Home from './components/views/Home';
 import Login from './components/views/Login';
 import Reports from './components/views/Reports';
 import DeleteUser from './components/views/DeleteUser';
-import './App.css';
+import './styles/App.css';
 
 function App() {
   return (
