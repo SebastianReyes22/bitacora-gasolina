@@ -1,7 +1,16 @@
 import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
+import { useUserAuth } from '../context/UserAuthContext';
 
-export default function Headers() {
+const Headers = () => {
+  const { logOut } = useUserAuth();
+  const handleLogOut = async () => {
+    try {
+      await logOut();
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Navbar
       sticky='top'
@@ -41,7 +50,7 @@ export default function Headers() {
             </NavDropdown>
           </Nav>
           <Nav>
-            <Nav.Link eventKey={2} href='./login'>
+            <Nav.Link eventKey={2} onClick={handleLogOut}>
               ❌ Cerrar Sesión
             </Nav.Link>
           </Nav>
@@ -49,4 +58,6 @@ export default function Headers() {
       </Container>
     </Navbar>
   );
-}
+};
+
+export default Headers;

@@ -1,4 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useUserAuth } from '../../context/UserAuthContext';
+import { useNavigate } from 'react-router-dom';
 import Axios from 'axios';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import '../../styles/styles.css';
@@ -10,16 +12,21 @@ const Login = () => {
   const [passwordUser, setPasswordUser] = useState('');
   const inputName = useRef(null);
 
-  const handleChangeUser = e => {
-    e.preventDefault();
-    setUserName(e.target.value);
+  const navigate = useNavigate();
+
+  const { logIn } = useUserAuth();
+
+  const handleSubmit = async () => {
+    try {
+      await logIn(userName, passwordUser);
+      navigate('/bitacoras');
+    } catch (err) {
+      alert('Error, algo salió mal');
+    }
   };
 
-  const handleChangePassword = e => {
-    e.preventDefault();
-    setPasswordUser(e.target.value);
-  };
-
+  {
+    /* 
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('option', 'loginQuery');
@@ -44,8 +51,11 @@ const Login = () => {
         console.log('Error en el servidor', error);
       });
   };
+*/
+  }
 
   const handleSubmitInput = e => {
+    //e.preventDefault();
     if (e.key === 'Enter') {
       handleSubmit();
     }
@@ -69,7 +79,7 @@ const Login = () => {
                   type='text'
                   placeholder='Nombre de usuario'
                   value={userName}
-                  onChange={handleChangeUser}
+                  onChange={e => setUserName(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
@@ -78,7 +88,7 @@ const Login = () => {
                   type='password'
                   placeholder='Password'
                   value={passwordUser}
-                  onChange={handleChangePassword}
+                  onChange={e => setPasswordUser(e.target.value)}
                   onKeyDown={handleSubmitInput}
                 />
               </Form.Group>

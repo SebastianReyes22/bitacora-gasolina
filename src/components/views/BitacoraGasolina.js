@@ -6,7 +6,7 @@ import 'react-datepicker/dist/react-datepicker.css';
 import Axios from 'axios';
 import ReactHtmlTableToExcel from 'react-html-table-to-excel';
 
-export default function BitacoraGasolina(props) {
+const BitacoraGasolina = () => {
   //Cadena de conexión
   const URI = process.env.REACT_APP_SERVER_URL;
 
@@ -237,4 +237,6 @@ export default function BitacoraGasolina(props) {
       </Row>
     </>
   );
-}
+};
+
+export default BitacoraGasolina;
