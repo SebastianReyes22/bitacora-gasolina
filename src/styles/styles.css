@@ -1,20 +1,39 @@
-.login {
-  position: absolute;
-  background: #354057;
-}
-
 .titleLogin {
   font-size: 40px;
   text-align: center;
 }
 
 .card-style {
-  background-color: #2b2e3d;
-  color: white;
+  background-color: #fff;
+  color: black;
+  font-weight: bold;
+}
+.card-style-login {
+  background-color: #fff;
+  color: black;
+  border-color: rgb(189, 186, 186);
+}
+
+.card-style-bitacora {
+  border-color: rgb(189, 186, 186);
 }
 
 .table {
   background-color: #ffffff;
+}
+
+.table-style {
+  border-collapse: collapse;
+  margin: 25px 0;
+  font-size: 0.9em;
+  min-width: 400px;
+  border-color: black;
+}
+
+.table-style thead tr {
+  background-color: #368cc5;
+  color: #ffffff;
+  text-align: left;
 }
 
 .imageUser {
@@ -34,8 +53,8 @@
 .hiddenForm {
   width: 1%;
   height: 1%;
-  background-color: #2b2e3d;
-  border-color: #2b2e3d;
+  background-color: #ffffff;
+  border-color: #ffffff;
 }
 
 body {
@@ -45,6 +64,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-color: #d3d6e0;
 }
 
 code {
@@ -67,21 +87,9 @@ code {
   }
 }
 
-.App-header {
-  background-color: #354057;
-  min-height: 120vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.component {
   justify-content: center;
-  color: white;
-}
-
-.App-header-home {
-  background-color: #354057;
-  min-height: 120vh;
-  justify-content: center;
-  color: white;
+  margin-top: 50px;
 }
 
 .App-link {
@@ -95,4 +103,17 @@ code {
   to {
     transform: rotate(360deg);
   }
+}
+
+.footer {
+  color: #ffffff;
+  text-align: center;
+}
+
+.footer-image {
+  width: 50%;
+}
+
+.header-nav {
+  margin-right: 70px;
 }
