@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useUserAuth } from '../../context/UserAuthContext';
 import { useNavigate } from 'react-router-dom';
-import Axios from 'axios';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import '../../styles/styles.css';
 
 const Login = () => {
-  const URI = process.env.REACT_APP_SERVER_URL;
-
   const [userName, setUserName] = useState('');
   const [passwordUser, setPasswordUser] = useState('');
   const inputName = useRef(null);
@@ -16,46 +13,18 @@ const Login = () => {
 
   const { logIn } = useUserAuth();
 
+  //Login
   const handleSubmit = async () => {
     try {
       await logIn(userName, passwordUser);
-      navigate('/bitacoras');
+      navigate('/reportes');
     } catch (err) {
       alert('Error, algo salió mal');
     }
   };
 
-  {
-    /* 
-  const handleSubmit = async () => {
-    let formData = new FormData();
-    formData.append('option', 'loginQuery');
-    formData.append('userName', userName);
-    formData.append('passwordUser', passwordUser);
-
-    await Axios({
-      method: 'POST',
-      url: URI,
-      data: formData,
-      config: { headers: { 'Content-Type': 'multipart/form-data' } },
-    })
-      .then(response => {
-        if (!response.data.login) {
-          alert('Usuario no registrado, comuniquese con el administrador');
-        } else {
-          console.log(response.data);
-          window.location = './bitacoras';
-        }
-      })
-      .catch(error => {
-        console.log('Error en el servidor', error);
-      });
-  };
-*/
-  }
-
+  //Evento cuando se presiona la tecla Enter
   const handleSubmitInput = e => {
-    //e.preventDefault();
     if (e.key === 'Enter') {
       handleSubmit();
     }
@@ -66,9 +35,9 @@ const Login = () => {
   }, []);
 
   return (
-    <Row className='App-header-home'>
+    <Row className='component'>
       <Col className='col-sm-4 mt-5'>
-        <Card className='card-style'>
+        <Card className='card-style-login'>
           <Card.Header className='titleLogin'>Inicio de sesión</Card.Header>
           <Card.Body>
             <Form>
@@ -76,17 +45,17 @@ const Login = () => {
                 <Form.Label> 👤 Usuario</Form.Label>
                 <Form.Control
                   ref={inputName}
-                  type='text'
+                  type='email'
                   placeholder='Nombre de usuario'
                   value={userName}
                   onChange={e => setUserName(e.target.value)}
                 />
               </Form.Group>
               <Form.Group className='mb-3' controlId='formBasicPassword'>
-                <Form.Label> 🔒 Password</Form.Label>
+                <Form.Label> 🔒 Contraseña</Form.Label>
                 <Form.Control
                   type='password'
-                  placeholder='Password'
+                  placeholder='*****************'
                   value={passwordUser}
                   onChange={e => setPasswordUser(e.target.value)}
                   onKeyDown={handleSubmitInput}

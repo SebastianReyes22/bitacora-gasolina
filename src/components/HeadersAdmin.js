@@ -4,7 +4,7 @@ import { useUserAuth } from '../context/UserAuthContext';
 import withPosco from '../images/withPosco.png';
 import poscoLogo from '../images/poscoLogo.png';
 
-const Headers = () => {
+const HeadersAdmin = () => {
   const { logOut } = useUserAuth();
 
   //Logout
@@ -50,6 +50,7 @@ const Headers = () => {
                 ⛽ Sistema Caseta
               </NavDropdown.Item>
             </NavDropdown>
+            <Nav.Link href='./addUser'> 👤 Agregar Usuario</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link
@@ -66,4 +67,4 @@ const Headers = () => {
   );
 };
 
-export default Headers;
+export default HeadersAdmin;

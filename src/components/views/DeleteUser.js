@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import Headers from '../Headers';
+import HeadersAdmin from '../HeadersAdmin';
 import { Form, Row, Col, Card, Button, Table } from 'react-bootstrap';
 import DeleteRow from '../DeleteRow';
+import { useUserAuth } from '../../context/UserAuthContext';
 
 const DeleteUser = () => {
   //Cadena de conexión
@@ -16,22 +18,12 @@ const DeleteUser = () => {
   const [editFormData, setEditFormData] = useState([]); //Constante que guarda el data de la api para editar
   const [editUserId, setEditUserId] = useState(null);
 
+  const { userRol } = useUserAuth();
+
   //Funcion que cambia el valor del input nomina
   const handleChangeNomina = e => {
     e.preventDefault();
     setNomina(e.target.value.replace(/\D/g, ''));
-  };
-
-  //Funcion que cambia el valor del input nombre
-  const handleChangeUserName = e => {
-    e.preventDefault();
-    setUserName(e.target.value);
-  };
-
-  //Funcion que cambia el valor del input departamento
-  const handleChangeDepartment = e => {
-    e.preventDefault();
-    setDepartment(e.target.value);
   };
 
   //Consulta de información seleccionada
@@ -51,14 +43,12 @@ const DeleteUser = () => {
       .then(response => {
         if (response.data.userDelete === false) {
           alert('Registros no encontrados');
-          window.location = './eliminarUsuario';
         } else {
-          console.log(response.data);
           setUserData(response.data);
         }
       })
       .catch(error => {
-        console.log('Error en el servidor', error);
+        alert('Error en el servidor', error);
       });
   };
 
@@ -86,15 +76,20 @@ const DeleteUser = () => {
         console.log('Error en el servidor', error);
       });
   };
+
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './eliminarUsuario';
+      setNomina('');
+      setUserName('');
+      setDepartment('');
+      setUserData([]);
     }
   };
 
+  //Eliminar usuario seleccionado de la tabla
   const handleDeleteClick = (e, userInfo) => {
-    if (window.confirm('¿Realmente quieres limpiar la tabla?')) {
+    if (window.confirm('¿Realmente quieres eliminar el usuario?')) {
       e.preventDefault();
       setEditUserId(userInfo.id);
 
@@ -114,10 +109,10 @@ const DeleteUser = () => {
 
   return (
     <>
-      <Headers />
-      <Row className='App-header'>
-        <Col className='mt-5'>
-          <Card className='card-style'>
+      {userRol.rol === '0' ? <Headers /> : <HeadersAdmin />}
+      <Row className='component'>
+        <Col className='mt-3 mb-5 col-sm-10'>
+          <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Eliminar Usuario</Card.Header>
             <Card.Body>
               <Form>
@@ -143,7 +138,7 @@ const DeleteUser = () => {
                       type='text'
                       placeholder='Nombre del empleado'
                       value={userName}
-                      onChange={handleChangeUserName}
+                      onChange={e => setUserName(e.target.value)}
                     />
                   </Col>
                   <Col sm='4'>
@@ -153,7 +148,7 @@ const DeleteUser = () => {
                       type='text'
                       placeholder='Nombre del departamento'
                       value={department}
-                      onChange={handleChangeDepartment}>
+                      onChange={e => setDepartment(e.target.value)}>
                       <option value=''>Seleccionar Departamento</option>
                       <option value='MARKETING DEPT'>MARKETING DEPT</option>
                       <option value='MAINTENANCE SECTION'>
@@ -206,12 +201,18 @@ const DeleteUser = () => {
                     </div>
                   </Col>
                 </Form.Group>
-                <Table striped bordered hover id='tableInfoUsers'>
+                <Table
+                  striped
+                  bordered
+                  hover
+                  id='tableInfoUsers'
+                  className='table-style'>
                   <thead>
                     <tr>
                       <th>Nómina</th>
                       <th>Nombre</th>
                       <th>Departamento</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>

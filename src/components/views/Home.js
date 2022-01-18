@@ -3,6 +3,7 @@ import Axios from 'axios';
 import { Form, Button, Row, Col, Card } from 'react-bootstrap';
 
 export default function Home() {
+  //uri de api de axios
   const URI = process.env.REACT_APP_SERVER_URL;
 
   const [nomina, setNumNomina] = useState('');
@@ -12,11 +13,13 @@ export default function Home() {
 
   const inputName = useRef(null);
 
+  //Validacion de solo numeros en input nomina
   const handleChangeNomina = e => {
     e.preventDefault();
     setNumNomina(e.target.value.replace(/\D/g, ''));
   };
 
+  //Peticion de axios a la api
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('option', 'selectEmpleado');
@@ -48,6 +51,7 @@ export default function Home() {
       });
   };
 
+  //Evento de presionar tecla Enter
   const handleSubmitInput = e => {
     if (e.key === 'Enter') {
       handleSubmit();
@@ -59,9 +63,9 @@ export default function Home() {
   }, []);
 
   return (
-    <Row className='App-header-home'>
+    <Row className='component'>
       <Col className='col-sm-6 mt-5 '>
-        <Card className='card-style'>
+        <Card className='card-style-bitacora'>
           <Card.Header className='titleLogin'>
             {' '}
             ⛽ BITÁCORA DE GASOLINA ⛽{' '}

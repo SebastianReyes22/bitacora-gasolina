@@ -1,10 +1,12 @@
 import { Fragment, React, useState } from 'react';
 import Axios from 'axios';
 import Headers from '../Headers';
+import HeadersAdmin from '../HeadersAdmin';
 import { Button, Card, Col, Form, Row, Table } from 'react-bootstrap';
 import ReadOnlyRow from '../ReadOnlyRow';
 import EditableRow from '../EditableRow';
 import ReactHtmlTableToExcel from 'react-html-table-to-excel';
+import { useUserAuth } from '../../context/UserAuthContext';
 
 export default function Reports() {
   //Cadena de conexión
@@ -21,6 +23,8 @@ export default function Reports() {
   const [editFormData, setEditFormData] = useState([]); //Constante que guarda el data de la api para editar
   const [editUserId, setEditUserId] = useState(null);
 
+  const { userRol } = useUserAuth();
+
   //Petición de axios a la api
   const handleSubmit = async () => {
     let formData = new FormData();
@@ -35,9 +39,8 @@ export default function Reports() {
       config: { headers: { 'Content-Type': 'multipart/form-data' } },
     })
       .then(response => {
-        if (response.data.user===false) {
+        if (response.data.user === false) {
           alert('Registros no encontrados');
-          window.location = './reportes';
         } else {
           setUserData(response.data);
         }
@@ -94,18 +97,19 @@ export default function Reports() {
     setEditUserId(null);
   };
 
+  //Lipiar la tabla
   const handleSubmitClean = () => {
     if (window.confirm('¿Realmente quieres limpiar la tabla?')) {
-      window.location = './reportes';
+      setUserData([]);
     }
   };
 
   return (
     <>
-      <Headers />
-      <Row className='App-header-home'>
-        <Col className='mt-5'>
-          <Card className='card-style'>
+      {userRol.rol === '0' ? <Headers /> : <HeadersAdmin />}
+      <Row className='component'>
+        <Col className='mt-3 col-sm-10 mb-5'>
+          <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Reporte mensual</Card.Header>
             <Card.Body>
               <Form>
@@ -143,7 +147,12 @@ export default function Reports() {
                     </div>
                   </Col>
                 </Form.Group>
-                <Table striped bordered hover id='tableInfoUsers'>
+                <Table
+                  className='table-style'
+                  striped
+                  bordered
+                  hover
+                  id='tableInfoUsers'>
                   <thead>
                     <tr>
                       <th>Nómina</th>
@@ -151,6 +160,7 @@ export default function Reports() {
                       <th>Departamento</th>
                       <th>Días Asistidos</th>
                       <th>%</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody>

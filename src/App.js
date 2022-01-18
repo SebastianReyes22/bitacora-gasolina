@@ -7,13 +7,9 @@ import Login from './components/views/Login';
 import Reports from './components/views/Reports';
 import DeleteUser from './components/views/DeleteUser';
 import PageNotFound from './components/views/PageNotFound';
-import './styles/App.css';
+import AddUser from './components/views/AddUser';
 import { UserAuthContextProvider } from './context/UserAuthContext';
 
-{
-  /*<BrowserRouter basename='/bitacora-gasolina'>
-  <Route exact path='/bitacoras' element={<BitacoraGasolina />} /> */
-}
 function App() {
   return (
     <BrowserRouter basename='/bitacora-gasolina'>
@@ -55,6 +51,15 @@ function App() {
             element={
               <ProtectedRoute>
                 <DeleteUser />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            exact
+            path='/addUser'
+            element={
+              <ProtectedRoute>
+                <AddUser />
               </ProtectedRoute>
             }
           />

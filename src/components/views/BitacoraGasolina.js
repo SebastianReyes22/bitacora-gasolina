@@ -5,6 +5,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Axios from 'axios';
 import ReactHtmlTableToExcel from 'react-html-table-to-excel';
+import HeadersAdmin from '../HeadersAdmin';
+import { useUserAuth } from '../../context/UserAuthContext';
 
 const BitacoraGasolina = () => {
   //Cadena de conexión
@@ -20,6 +22,8 @@ const BitacoraGasolina = () => {
   //Variables para mostrar en la tabla
   const [userData, setUserData] = useState([]);
 
+  const { userRol } = useUserAuth();
+
   //Funcion que cambia el valor de lafecha de inicio
   const handleChangeStartDate = date => {
     setStartDate(date);
@@ -34,18 +38,6 @@ const BitacoraGasolina = () => {
   const handleChangeNomina = e => {
     e.preventDefault();
     setNomina(e.target.value.replace(/\D/g, ''));
-  };
-
-  //Funcion que cambia el valor del input nombre
-  const handleChangeUserName = e => {
-    e.preventDefault();
-    setUserName(e.target.value);
-  };
-
-  //Funcion que cambia el valor del input departamento
-  const handleChangeDepartment = e => {
-    e.preventDefault();
-    setDepartment(e.target.value);
   };
 
   //Consulta de información seleccionada
@@ -67,9 +59,7 @@ const BitacoraGasolina = () => {
       .then(response => {
         if (response.data.user === false) {
           alert('Registros no encontrados');
-          window.location = './bitacoras';
         } else {
-          console.log(response.data);
           setUserData(response.data);
         }
       })
@@ -81,16 +71,19 @@ const BitacoraGasolina = () => {
   //Funcion que limpia el dashboard
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
-      window.location = './bitacoras';
+      setNomina('');
+      setUserName('');
+      setDepartment('');
+      setUserData([]);
     }
   };
 
   return (
     <>
-      <Headers />
-      <Row className='App-header'>
-        <Col className='mt-5'>
-          <Card className='card-style'>
+      {userRol.rol === '0' ? <Headers /> : <HeadersAdmin />}
+      <Row className='component'>
+        <Col className='mt-3 col-sm-10 mb-5'>
+          <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Generar bitácora</Card.Header>
             <Card.Body>
               <Form>
@@ -111,6 +104,67 @@ const BitacoraGasolina = () => {
                       onChange={handleChangeEndDate}
                     />
                   </Col>
+                  <Col sm='3'>
+                    <Form.Label>Número nomina</Form.Label>
+                    <Form.Control
+                      sm='6'
+                      type='text'
+                      value={nomina}
+                      onChange={handleChangeNomina.bind(this)}
+                      placeholder='Número de nomina'
+                      maxLength='5'
+                    />
+                  </Col>
+                  <Col sm='3'>
+                    <Form.Label>Nombre</Form.Label>
+                    <Form.Control
+                      sm='6'
+                      type='text'
+                      placeholder='Nombre del empleado'
+                      value={userName}
+                      onChange={e => setUserName(e.target.value)}
+                    />
+                  </Col>
+                </Form.Group>
+                <Form.Group
+                  as={Row}
+                  controlId='formPlaintextNomina'
+                  className='mb-4'>
+                  <Col sm='4'>
+                    <Form.Label>Departamento</Form.Label>
+                    <Form.Select
+                      sm='6'
+                      type='text'
+                      placeholder='Nombre del departamento'
+                      value={department}
+                      onChange={e => setDepartment(e.target.value)}>
+                      <option value=''>Seleccionar Departamento</option>
+                      <option value='MARKETING DEPT'>MARKETING DEPT</option>
+                      <option value='MAINTENANCE SECTION'>
+                        MAINTENANCE SECTION
+                      </option>
+                      <option value='QUALITY CONTROL SECTION'>
+                        QUALITY CONTROL SECTION
+                      </option>
+                      <option value='TRANSPORT CONTROL SECTION'>
+                        TRANSPORT CONTROL SECTION
+                      </option>
+                      <option value='PRODUCTION MANAGMENT SECTION'>
+                        PRODUCTION MANAGMENT SECTION
+                      </option>
+                      <option value='SALES 1 SECTION'>SALES 1 SECTION</option>
+                      <option value='SALES TEAM'>SALES TEAM</option>
+                      <option value='ACCOUNTING TEAM'>ACCOUNTING TEAM</option>
+                      <option value='HR TEAM'>HR TEAM</option>
+                      <option value='IT TEAM'>IT TEAM</option>
+                      <option value='PLANT'>PLANT</option>
+                      <option value='GENERAL AFFAIRS TEAM'>
+                        GENERAL AFFAIRS TEAM
+                      </option>
+                      <option value='TREASURY TEAM'>TREASURY TEAM</option>
+                    </Form.Select>
+                  </Col>
+                  <Col sm='2' />
                   <Col sm='2'>
                     <div className='d-grid gap-2'>
                       <Button
@@ -146,68 +200,12 @@ const BitacoraGasolina = () => {
                     </div>
                   </Col>
                 </Form.Group>
-                <Form.Group
-                  as={Row}
-                  controlId='formPlaintextNomina'
-                  className='mb-4'>
-                  <Col sm='4'>
-                    <Form.Label>Número nomina</Form.Label>
-                    <Form.Control
-                      sm='6'
-                      type='text'
-                      value={nomina}
-                      onChange={handleChangeNomina.bind(this)}
-                      placeholder='Número de nomina'
-                      maxLength='5'
-                    />
-                  </Col>
-                  <Col sm='4'>
-                    <Form.Label>Nombre</Form.Label>
-                    <Form.Control
-                      sm='6'
-                      type='text'
-                      placeholder='Nombre del empleado'
-                      value={userName}
-                      onChange={handleChangeUserName}
-                    />
-                  </Col>
-                  <Col sm='4'>
-                    <Form.Label>Departamento</Form.Label>
-
-                    <Form.Select
-                      sm='6'
-                      type='text'
-                      placeholder='Nombre del departamento'
-                      value={department}
-                      onChange={handleChangeDepartment}>
-                      <option value=''>Seleccionar Departamento</option>
-                      <option value='MARKETING DEPT'>MARKETING DEPT</option>
-                      <option value='MAINTENANCE SECTION'>
-                        MAINTENANCE SECTION
-                      </option>
-                      <option value='QUALITY CONTROL SECTION'>
-                        QUALITY CONTROL SECTION
-                      </option>
-                      <option value='TRANSPORT CONTROL SECTION'>
-                        TRANSPORT CONTROL SECTION
-                      </option>
-                      <option value='PRODUCTION MANAGMENT SECTION'>
-                        PRODUCTION MANAGMENT SECTION
-                      </option>
-                      <option value='SALES 1 SECTION'>SALES 1 SECTION</option>
-                      <option value='SALES TEAM'>SALES TEAM</option>
-                      <option value='ACCOUNTING TEAM'>ACCOUNTING TEAM</option>
-                      <option value='HR TEAM'>HR TEAM</option>
-                      <option value='IT TEAM'>IT TEAM</option>
-                      <option value='PLANT'>PLANT</option>
-                      <option value='GENERAL AFFAIRS TEAM'>
-                        GENERAL AFFAIRS TEAM
-                      </option>
-                      <option value='TREASURY TEAM'>TREASURY TEAM</option>
-                    </Form.Select>
-                  </Col>
-                </Form.Group>
-                <Table striped bordered hover id='tableInfoUsers'>
+                <Table
+                  striped
+                  bordered
+                  hover
+                  id='tableInfoUsers'
+                  className='table-style'>
                   <thead>
                     <tr>
                       <th>Nómina</th>

@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import Axios from 'axios';
-import Headers from '../../components/Headers';
+import Headers from '../Headers';
+import HeadersAdmin from '../HeadersAdmin';
 import { Form, Row, Col, Card, Button } from 'react-bootstrap';
+import { useUserAuth } from '../../context/UserAuthContext';
 
 export default function CreateUser() {
   const URI = process.env.REACT_APP_SERVER_URL;
@@ -11,16 +13,12 @@ export default function CreateUser() {
   const [department, setDepartment] = useState('');
   var picture;
 
+  const { userRol } = useUserAuth();
+
   //Funcion para sacar el valor del input de nomina
   const handleNomina = e => {
     e.preventDefault();
     setNomina(e.target.value.replace(/\D/g, ''));
-  };
-
-  //Funcion para sacar el valor del input de nombre
-  const handleName = e => {
-    e.preventDefault();
-    setName(e.target.value);
   };
 
   //Funcion que convierte la imagen a base64
@@ -33,12 +31,6 @@ export default function CreateUser() {
         picture = base64;
       };
     });
-  };
-
-  //Funcion para sacar el valor del input de departamento
-  const handleDepartment = e => {
-    e.preventDefault();
-    setDepartment(e.target.value);
   };
 
   //Funcion que manda el POST a la bd
@@ -59,7 +51,9 @@ export default function CreateUser() {
       .then(response => {
         if (response.data.insert === true) {
           alert('Datos capturados correctamente');
-          window.location = './agregarUsuario';
+          setNomina('');
+          setName('');
+          setDepartment('');
         } else {
           alert('Err, comuniquese con el administrador');
         }
@@ -71,15 +65,19 @@ export default function CreateUser() {
 
   //Funcion que limpa todos los imput a su valor por defecto
   const handleRefresh = () => {
-    window.location = './agregarUsuario';
+    if (window.confirm('¿Realmente quieres limpiar la busqueda?')) {
+      setNomina('');
+      setName('');
+      setDepartment('');
+    }
   };
 
   return (
     <>
-      <Headers />
-      <Row className='App-header'>
-        <Col className='mt-5'>
-          <Card className='card-style'>
+      {userRol.rol === '0' ? <Headers /> : <HeadersAdmin />}
+      <Row className='component'>
+        <Col className='mt-3 col-sm-10'>
+          <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Agregar empleado</Card.Header>
             <Card.Body>
               <Form className=''>
@@ -102,14 +100,14 @@ export default function CreateUser() {
                       type='text'
                       placeholder='Nombre completo'
                       value={name}
-                      onChange={handleName}
+                      onChange={e => setName(e.target.value)}
                     />
                   </Col>
                   <Col sm='3'>
                     <Form.Label column>Departamento</Form.Label>
                     <Form.Select
                       value={department}
-                      onChange={handleDepartment}
+                      onChange={e => setDepartment(e.target.value)}
                       aria-label='Default select example'>
                       <option>Seleccionar Departamento</option>
                       <option value='MARKETING DEPT'>MARKETING DEPT</option>
@@ -148,18 +146,20 @@ export default function CreateUser() {
                   </Col>
                 </Form.Group>
                 <Form.Group as={Row} className='mb-3' controlId='formFechas'>
-                  <Col sm='5' />
-                  <Col sm='5' />
-                  <Col sm='1'>
-                    <Button
-                      className='mt-4'
-                      variant='primary'
-                      size='lg'
-                      onClick={handleSubmit}>
-                      Guardar
-                    </Button>
+                  <Col sm='4' />
+                  <Col sm='4' />
+                  <Col sm='2'>
+                    <div className='d-grid gap-2'>
+                      <Button
+                        className='mt-4'
+                        variant='primary'
+                        size='lg'
+                        onClick={handleSubmit}>
+                        Guardar
+                      </Button>
+                    </div>
                   </Col>
-                  <Col sm='1'>
+                  <Col sm='2'>
                     <div className='d-grid gap-2'>
                       <Button
                         className='mt-4'
