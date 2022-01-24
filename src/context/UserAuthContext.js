@@ -20,19 +20,16 @@ export function UserAuthContextProvider({ children }) {
   }
 
   //Sigup
-  async function sigUp(email, password, role) {
-    const infoUser = await createUserWithEmailAndPassword(
-      auth,
-      email,
-      password,
-    ).then(usuarioFirebase => {
-      return usuarioFirebase;
-    });
-
-    await setDoc(doc(firestore, 'users', `${infoUser.user.uid}`), {
-      email: email,
-      role: role,
-    });
+  function sigUp(email, password, role) {
+    const infoUser = createUserWithEmailAndPassword(auth, email, password).then(
+      usuarioFirebase => {
+        setDoc(doc(firestore, 'users', `${infoUser.user.uid}`), {
+          email: email,
+          role: role,
+          password: password,
+        });
+      },
+    );
   }
 
   //Logout
