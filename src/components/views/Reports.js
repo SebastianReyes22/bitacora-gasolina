@@ -106,7 +106,7 @@ export default function Reports() {
 
   return (
     <>
-      {userRol.rol === '0' ? <Headers /> : <HeadersAdmin />}
+      {userRol.rol == '1' ? <HeadersAdmin /> : <Headers />}
       <Row className='component'>
         <Col className='mt-3 col-sm-10 mb-5'>
           <Card className='card-style-bitacora'>

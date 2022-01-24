@@ -9,8 +9,9 @@ export default function AddUser() {
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
 
-  const { sigUp, userRol } = useUserAuth();
+  const { sigUp, userRol, user } = useUserAuth();
 
+  console.log(userRol);
   //Creación de usuario en firebase
   const handleSubmit = async () => {
     try {
@@ -27,6 +28,7 @@ export default function AddUser() {
     setEmail('');
     setPassword('');
     setRole('');
+    console.log(user);
   };
 
   const auth = () => {
@@ -116,5 +118,5 @@ export default function AddUser() {
     );
   };
 
-  return userRol.rol === '0' ? unAuth() : auth();
+  return userRol.rol == '1' ? auth() : unAuth();
 }

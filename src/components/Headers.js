@@ -9,10 +9,12 @@ const Headers = () => {
 
   //Logout
   const handleLogOut = async () => {
-    try {
-      await logOut();
-    } catch (err) {
-      console.log(err);
+    if (window.confirm('¿Realmente quieres cerrar sesión?')) {
+      try {
+        await logOut();
+      } catch (err) {
+        console.log(err);
+      }
     }
   };
 
