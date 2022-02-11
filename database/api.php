@@ -13,7 +13,7 @@ try {
 //LOGIN
 if ($_POST['option'] == 'loginQuery') {
   $sql =
-    "SELECT * FROM usuarios WHERE userName = :userName AND passwordUser = :passwordUser";
+    'SELECT * FROM usuarios WHERE userName = :userName AND passwordUser = :passwordUser';
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':userName', $_POST['userName']);
@@ -32,7 +32,7 @@ if ($_POST['option'] == 'selectEmpleado') {
   $array = [];
   $x = 0;
   $sql =
-    "SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina";
+    'SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina';
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':nomina', $_POST['nomina']);
@@ -55,7 +55,7 @@ if ($_POST['option'] == 'selectEmpleado') {
     echo json_encode(['info' => false]);
   }
 
-  $sql = "INSERT INTO registros (numNomina) VALUES (:nomina)";
+  $sql = 'INSERT INTO registros (numNomina) VALUES (:nomina)';
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':nomina', $_POST['nomina']);
@@ -65,7 +65,7 @@ if ($_POST['option'] == 'selectEmpleado') {
 //Agregar nuevos usuarios
 if ($_POST['option'] == 'insertUser') {
   $sql =
-    "INSERT INTO empleados (nomina, nombre, foto, departamento) VALUES (:nomina, :nombre, :foto, :departamento)";
+    'INSERT INTO empleados (nomina, nombre, foto, departamento) VALUES (:nomina, :nombre, :foto, :departamento)';
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':nomina', $_POST['nomina']);
@@ -154,7 +154,7 @@ if ($_POST['option'] == 'getReports') {
 
 //DELETE USER
 if ($_POST['option'] == 'deleteUser') {
-  $sql = "DELETE FROM empleados WHERE nomina = :nomina";
+  $sql = 'DELETE FROM empleados WHERE nomina = :nomina';
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':nomina', $_POST['nomina']);

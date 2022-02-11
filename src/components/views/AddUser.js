@@ -118,5 +118,5 @@ export default function AddUser() {
     );
   };
 
-  return userRol.rol == '1' ? auth() : unAuth();
+  return auth();
 }
