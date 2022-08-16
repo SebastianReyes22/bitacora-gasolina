@@ -13,10 +13,13 @@ const Login = () => {
 
   const { logIn } = useUserAuth();
 
+  let email = '';
+
   //Login
   const handleSubmit = async () => {
+    email = userName + '@poscomppc.com';
     try {
-      await logIn(userName, passwordUser);
+      await logIn(email, passwordUser);
       navigate('/reportes');
     } catch (err) {
       alert('Error, algo salió mal');
