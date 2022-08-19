@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
-import { Form, Button, Row, Col, Card } from 'react-bootstrap';
+import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 
 export default function Home() {
   //uri de api de axios
@@ -10,6 +10,9 @@ export default function Home() {
   const [userName, setUserName] = useState('');
   const [userArea, setUserArea] = useState('');
   const [userImage, setUserImage] = useState('');
+  const [message, setMessage] = useState('');
+  const [error, setError] = useState(false);
+  var currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
   const inputName = useRef(null);
 
@@ -24,6 +27,7 @@ export default function Home() {
     let formData = new FormData();
     formData.append('option', 'selectEmpleado');
     formData.append('nomina', nomina);
+    formData.append('date', currentDate);
 
     await Axios({
       method: 'POST',
@@ -36,12 +40,16 @@ export default function Home() {
           setUserName(response.data.name);
           setUserImage(response.data.picture);
           setUserArea(response.data.deparment);
+          setMessage(response.data.message);
+          setError(false);
           inputName.current.focus();
           inputName.current.select();
         } else {
-          alert(
-            'Empleado no encontrado en la base de datos, comuniquese con el administrador',
-          );
+          setUserName('');
+          setUserImage('');
+          setUserArea('');
+          setMessage(response.data.message);
+          setError(true);
           inputName.current.focus();
           inputName.current.select();
         }
@@ -97,6 +105,13 @@ export default function Home() {
                 Aceptar
               </Button>
             </div>
+            {error ? (
+              <div className='alert-box'>
+                <Alert className='alert' variant='danger'>
+                  {message}
+                </Alert>
+              </div>
+            ) : null}
             <Form.Group as={Row} className='mt-5' controlId='formFechas'>
               <Col sm='8'>
                 <Form.Label className='textUser' column>

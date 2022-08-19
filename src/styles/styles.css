@@ -117,3 +117,15 @@ code {
 .header-nav {
   margin-right: 70px;
 }
+
+.alert {
+  margin-top: 10px;
+  width: 50%;
+  text-align: center;
+}
+
+.alert-box {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
