@@ -7,6 +7,9 @@ import ReadOnlyRow from '../ReadOnlyRow';
 import EditableRow from '../EditableRow';
 import ReactHtmlTableToExcel from 'react-html-table-to-excel';
 import { useUserAuth } from '../../context/UserAuthContext';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import es from 'date-fns/locale/es';
 
 export default function Reports() {
   //Cadena de conexión
@@ -25,12 +28,25 @@ export default function Reports() {
 
   const { userRol } = useUserAuth();
 
+  // Datepicker
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+  registerLocale('es', es);
+  //Funcion que cambia el valor de lafecha de inicio
+  const handleChangeStartDate = date => {
+    setStartDate(date);
+  };
+  //Funcion que cambia el valor de la fecha final
+  const handleChangeEndDate = date => {
+    setEndDate(date);
+  };
+
   //Petición de axios a la api
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('option', 'getReports');
-    formData.append('startDate', firstDate.toJSON());
-    formData.append('endDate', lastDate.toJSON());
+    formData.append('startDate', startDate.toJSON());
+    formData.append('endDate', endDate.toJSON());
 
     await Axios({
       method: 'POST',
@@ -114,17 +130,26 @@ export default function Reports() {
             <Card.Body>
               <Form>
                 <Form.Group as={Row} className='mb-3' controlId='formFechas'>
-                  <Col sm='6'>
-                    <div className='d-grid gap-2'>
-                      <Button
-                        variant='primary'
-                        size='lg'
-                        onClick={handleSubmit}>
-                        Consultar reporte de {currentMonth}
-                      </Button>
-                    </div>
+                  <Col sm='3'>
+                    <Form.Label column>Fecha de inicio</Form.Label>
+                    <DatePicker
+                      dateFormat='dd/MM/yyyy'
+                      selected={startDate}
+                      onChange={handleChangeStartDate}
+                      locale='es'
+                    />
                   </Col>
                   <Col sm='3'>
+                    <Form.Label column>Fecha de termino</Form.Label>
+                    <DatePicker
+                      dateFormat='dd/MM/yyyy'
+                      selected={endDate}
+                      onChange={handleChangeEndDate}
+                      locale='es'
+                      minDate={startDate}
+                    />
+                  </Col>
+                  <Col sm='3' className='mt-4'>
                     <div className='d-grid gap-2'>
                       <ReactHtmlTableToExcel
                         id='btnExportExcel'
@@ -136,13 +161,24 @@ export default function Reports() {
                       />
                     </div>
                   </Col>
-                  <Col sm='3'>
+                  <Col sm='3' className='mt-4'>
                     <div className='d-grid gap-2'>
                       <Button
                         variant='danger'
                         size='lg'
                         onClick={handleSubmitClean}>
                         Limpiar
+                      </Button>
+                    </div>
+                  </Col>
+                  <Col sm='6' />
+                  <Col sm='6' className='mt-4'>
+                    <div className='d-grid gap-2'>
+                      <Button
+                        variant='primary'
+                        size='lg'
+                        onClick={handleSubmit}>
+                        Consultar reporte de asistencia
                       </Button>
                     </div>
                   </Col>

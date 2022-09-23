@@ -1,12 +1,13 @@
 import { React, useState } from 'react';
 import Headers from '../Headers';
 import { Form, Button, Row, Col, Card, Table } from 'react-bootstrap';
-import DatePicker from 'react-datepicker';
+import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import Axios from 'axios';
 import ReactHtmlTableToExcel from 'react-html-table-to-excel';
 import HeadersAdmin from '../HeadersAdmin';
 import { useUserAuth } from '../../context/UserAuthContext';
+import es from 'date-fns/locale/es';
 
 const BitacoraGasolina = () => {
   //Cadena de conexión
@@ -23,6 +24,8 @@ const BitacoraGasolina = () => {
   const [userData, setUserData] = useState([]);
 
   const { userRol } = useUserAuth();
+
+  registerLocale('es', es);
 
   //Funcion que cambia el valor de lafecha de inicio
   const handleChangeStartDate = date => {
@@ -91,17 +94,20 @@ const BitacoraGasolina = () => {
                   <Col sm='3'>
                     <Form.Label column>Fecha de inicio</Form.Label>
                     <DatePicker
-                      dateFormat='yyyy/MM/dd'
+                      dateFormat='dd/MM/yyyy'
                       selected={startDate}
                       onChange={handleChangeStartDate}
+                      locale='es'
                     />
                   </Col>
                   <Col sm='3'>
                     <Form.Label column>Fecha de termino</Form.Label>
                     <DatePicker
-                      dateFormat='yyyy/MM/dd'
+                      dateFormat='dd/MM/yyyy'
                       selected={endDate}
                       onChange={handleChangeEndDate}
+                      locale='es'
+                      minDate={startDate}
                     />
                   </Col>
                   <Col sm='3'>
