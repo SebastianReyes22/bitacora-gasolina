@@ -94,7 +94,7 @@ const BitacoraGasolina = () => {
                   <Col sm='3'>
                     <Form.Label column>Fecha de inicio</Form.Label>
                     <DatePicker
-                      dateFormat='dd/MM/yyyy'
+                      dateFormat='yyyy/MM/dd'
                       selected={startDate}
                       onChange={handleChangeStartDate}
                       locale='es'
@@ -103,7 +103,7 @@ const BitacoraGasolina = () => {
                   <Col sm='3'>
                     <Form.Label column>Fecha de termino</Form.Label>
                     <DatePicker
-                      dateFormat='dd/MM/yyyy'
+                      dateFormat='yyyy/MM/dd'
                       selected={endDate}
                       onChange={handleChangeEndDate}
                       locale='es'
@@ -218,7 +218,6 @@ const BitacoraGasolina = () => {
                       <th>Departamento</th>
                       <th>Nombre</th>
                       <th>Fecha de entrada</th>
-                      <th>Fecha de salida</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -228,8 +227,7 @@ const BitacoraGasolina = () => {
                           <td>{userInfo.nomina}</td>
                           <td>{userInfo.departamento}</td>
                           <td>{userInfo.nombre}</td>
-                          <td>{userInfo.fechaEntrada}</td>
-                          <td>{userInfo.fechaSalida}</td>
+                          <td>{userInfo.date}</td>
                         </tr>
                       ))}
                   </tbody>

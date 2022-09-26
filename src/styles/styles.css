@@ -3,6 +3,16 @@
   text-align: center;
 }
 
+.box-home {
+  padding: 10px;
+  margin-bottom: 10px;
+}
+
+.date-picker-home {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
 .card-style {
   background-color: #fff;
   color: black;

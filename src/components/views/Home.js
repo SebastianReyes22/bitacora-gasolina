@@ -1,10 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Axios from 'axios';
 import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
+import DatePicker, { registerLocale } from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
+import es from 'date-fns/locale/es';
 
 export default function Home() {
   //uri de api de axios
   const URI = process.env.REACT_APP_SERVER_URL;
+
+  // Datepicker
+  const [startDate, setStartDate] = useState(new Date());
+  registerLocale('es', es);
+  //Funcion que cambia el valor de lafecha de inicio
+  const handleChangeStartDate = date => {
+    setStartDate(date);
+  };
 
   const [nomina, setNumNomina] = useState('');
   const [userName, setUserName] = useState('');
@@ -12,7 +23,7 @@ export default function Home() {
   const [userImage, setUserImage] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState(false);
-  var currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
+  // var currentDate = new Date().toJSON().slice(0, 10).replace(/-/g, '-');
 
   const inputName = useRef(null);
 
@@ -25,6 +36,8 @@ export default function Home() {
   //Peticion de axios a la api
   const handleSubmit = async () => {
     let formData = new FormData();
+    var currentDate = startDate.toJSON().slice(0, 10).replace(/-/g, '-');
+
     formData.append('option', 'selectEmpleado');
     formData.append('nomina', nomina);
     formData.append('date', currentDate);
@@ -72,7 +85,7 @@ export default function Home() {
 
   return (
     <Row className='component'>
-      <Col className='col-sm-6 mt-5 '>
+      <Col className='col-sm-6 mt-5'>
         <Card className='card-style-bitacora'>
           <Card.Header className='titleLogin'>
             {' '}
@@ -80,11 +93,19 @@ export default function Home() {
           </Card.Header>
           <Card.Body>
             <Form>
-              <Form.Group as={Row} className='mb-3'>
-                <Form.Label column sm='2'>
-                  Número de nomina
-                </Form.Label>
-                <Col sm='9'>
+              <Form.Group as={Row} className='box-home'>
+                <Col sm='4'>
+                  <Form.Label column>Fecha de captura</Form.Label>
+                  <DatePicker
+                    className='date-picker-home'
+                    dateFormat='dd/MM/yyyy'
+                    selected={startDate}
+                    onChange={handleChangeStartDate}
+                    locale='es'
+                  />
+                </Col>
+                <Col sm='8'>
+                  <Form.Label>Número de nomina</Form.Label>
                   <Form.Control
                     ref={inputName}
                     type='text'
@@ -94,9 +115,6 @@ export default function Home() {
                     placeholder='12345'
                     maxLength='5'
                   />
-                </Col>
-                <Col sm='1'>
-                  <Form.Control type='text' className='hiddenForm' />
                 </Col>
               </Form.Group>
             </Form>

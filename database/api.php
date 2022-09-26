@@ -31,35 +31,49 @@ if ($_POST['option'] == 'loginQuery') {
 if ($_POST['option'] == 'selectEmpleado') {
   $array = [];
   $x = 0;
+  // $sql = 'SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina;';
   $sql =
-    'SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina';
-  $statement = $bd->prepare($sql);
+    'SELECT nomina, nombre, foto, departamento, COUNT(date) AS "cuenta" FROM empleados INNER JOIN registros WHERE empleados.nomina = :nomina AND date = :date AND registros.numNomina = :nomina;';
 
+  $statement = $bd->prepare($sql);
   $statement->bindParam(':nomina', $_POST['nomina']);
+  $statement->bindParam(':date', $_POST['date']);
   $statement->execute();
 
   if ($statement->rowCount() >= 1) {
     while ($row = $statement->fetch()) {
+      $array[$x]['nomina'] = $row['nomina'];
       $array[$x]['nombre'] = $row['nombre'];
       $array[$x]['foto'] = $row['foto'];
       $array[$x]['departamento'] = $row['departamento'];
+      $array[$x]['cuenta'] = $row['cuenta'];
       $x++;
-      echo json_encode([
-        'info' => true,
-        'name' => $row['nombre'],
-        'picture' => $row['foto'],
-        'deparment' => $row['departamento'],
-      ]);
+
+      if ($row['nomina'] != null) {
+        if ($row['cuenta'] == 0) {
+          $sql =
+            'INSERT INTO registros (numNomina, date) VALUES (:nomina, :date);';
+          $statement = $bd->prepare($sql);
+          $statement->bindParam(':nomina', $_POST['nomina']);
+          $statement->bindParam(':date', $_POST['date']);
+          $statement->execute();
+          echo json_encode([
+            'info' => true,
+            'name' => $row['nombre'],
+            'picture' => $row['foto'],
+            'deparment' => $row['departamento'],
+            'message' => 'Ususario registrado correctamente',
+          ]);
+        } else {
+          echo json_encode([
+            'message' => 'ERROR: Usuario registrado el día de hoy',
+          ]);
+        }
+      } else {
+        echo json_encode(['message' => 'ERROR: Usuario no registrado']);
+      }
     }
-  } else {
-    echo json_encode(['info' => false]);
   }
-
-  $sql = 'INSERT INTO registros (numNomina) VALUES (:nomina)';
-  $statement = $bd->prepare($sql);
-
-  $statement->bindParam(':nomina', $_POST['nomina']);
-  $statement->execute();
 }
 
 //Agregar nuevos usuarios
@@ -86,10 +100,10 @@ if ($_POST['option'] == 'selectUser') {
   $array = [];
   $x = 0;
 
-  $sql = "SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.fechaEntrada, registros.fechaSalida 
+  $sql = "SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.date 
     FROM empleados JOIN registros ON empleados.nomina = registros.numNomina
-    WHERE registros.fechaEntrada BETWEEN :startDate AND :endDate AND empleados.nomina LIKE CONCAT('%', :nomina '%') AND empleados.nombre 
-    LIKE CONCAT('%', :userName, '%') AND empleados.departamento LIKE CONCAT('%', :department, '%') ORDER BY registros.fechaEntrada";
+    WHERE registros.date BETWEEN :startDate AND :endDate AND empleados.nomina LIKE CONCAT('%', :nomina '%') AND empleados.nombre 
+    LIKE CONCAT('%', :userName, '%') AND empleados.departamento LIKE CONCAT('%', :department, '%') ORDER BY registros.date";
 
   $statement = $bd->prepare($sql);
 
@@ -106,8 +120,7 @@ if ($_POST['option'] == 'selectUser') {
       $array[$x]['nomina'] = $row['nomina'];
       $array[$x]['departamento'] = $row['departamento'];
       $array[$x]['nombre'] = $row['nombre'];
-      $array[$x]['fechaEntrada'] = $row['fechaEntrada'];
-      $array[$x]['fechaSalida'] = $row['fechaSalida'];
+      $array[$x]['date'] = $row['date'];
       $x++;
     }
     echo json_encode($array);
@@ -123,9 +136,9 @@ if ($_POST['option'] == 'getReports') {
 
   $sql = "SELECT empleados.nomina, empleados.nombre, empleados.departamento, asistencia, promedio 
                 FROM (SELECT empleados.nomina, empleados.nombre, empleados.departamento, 
-                COUNT(registros.fechaEntrada) AS asistencia, (COUNT(registros.fechaEntrada) / 30 * 100) 
+                COUNT(registros.date) AS asistencia, (COUNT(registros.date) / 30 * 100) 
                 AS promedio FROM empleados INNER JOIN registros ON empleados.nomina = registros.numNomina 
-                WHERE registros.fechaEntrada BETWEEN :startDate AND :endDate 
+                WHERE registros.date BETWEEN :startDate AND :endDate 
                 GROUP BY empleados.nomina, empleados.nombre, registros.numNomina) 
             empleados 
             GROUP BY empleados.nomina, empleados.nombre";

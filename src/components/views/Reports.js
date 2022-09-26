@@ -133,7 +133,7 @@ export default function Reports() {
                   <Col sm='3'>
                     <Form.Label column>Fecha de inicio</Form.Label>
                     <DatePicker
-                      dateFormat='dd/MM/yyyy'
+                      dateFormat='yyyy/MM/dd'
                       selected={startDate}
                       onChange={handleChangeStartDate}
                       locale='es'
@@ -142,11 +142,11 @@ export default function Reports() {
                   <Col sm='3'>
                     <Form.Label column>Fecha de termino</Form.Label>
                     <DatePicker
-                      dateFormat='dd/MM/yyyy'
+                      dateFormat='yyyy/MM/dd'
                       selected={endDate}
                       onChange={handleChangeEndDate}
-                      locale='es'
                       minDate={startDate}
+                      locale='es'
                     />
                   </Col>
                   <Col sm='3' className='mt-4'>
