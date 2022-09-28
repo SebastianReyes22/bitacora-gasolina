@@ -4,6 +4,7 @@ import { Form, Button, Row, Col, Card, Alert } from 'react-bootstrap';
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
+import { NavCaseta } from './NavCaseta';
 
 export const Home = () => {
   //uri de api de axios
@@ -85,6 +86,7 @@ export const Home = () => {
 
   return (
     <>
+      <NavCaseta />
       <Col className='component'>
         <Col className='col-sm-6 mt-5'>
           <Card className='card-style-bitacora'>
@@ -152,11 +154,6 @@ export const Home = () => {
           </Card>
         </Col>
       </Col>
-      <div className='delete-log'>
-        <Button variant='danger' href='./delete-log'>
-          Eliminar Registros
-        </Button>
-      </div>
     </>
   );
 };

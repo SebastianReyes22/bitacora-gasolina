@@ -1,15 +1,21 @@
-import { useState, Fragment } from 'react';
+import { useState } from 'react';
 import Axios from 'axios';
-import { Button, Card, Col, Form, Row, Table } from 'react-bootstrap';
+import { Alert, Button, Card, Col, Form, Row, Table } from 'react-bootstrap';
+
 import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
+
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSearch, faTrash } from '@fortawesome/free-solid-svg-icons';
+
+import { NavCaseta } from './NavCaseta';
 
 export const DeleteLog = () => {
   //Cadena de conexión
   const URI = process.env.REACT_APP_SERVER_URL;
+
+  const [error, setError] = useState(false);
 
   // Datepicker
   const [startDate, setStartDate] = useState(null);
@@ -35,6 +41,7 @@ export const DeleteLog = () => {
   const [userData, setUserData] = useState([]);
   const [nomina, setNomina] = useState('');
 
+  //Funcion que busca los datos de la bitacora
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('option', 'findLog');
@@ -49,9 +56,12 @@ export const DeleteLog = () => {
     })
       .then(response => {
         if (response.data.registros === false) {
-          alert('Registros no encontrados');
+          setNomina('');
+          setUserData([]);
+          setError(true);
         } else {
           setUserData(response.data);
+          setError(false);
         }
       })
       .catch(error => {
@@ -89,7 +99,10 @@ export const DeleteLog = () => {
   const handleClean = () => {
     if (window.confirm('Realmente quieres limpiar la busqueda')) {
       setNomina('');
-      setStartDate(new Date());
+      setUserData([]);
+      setStartDate(null);
+      setDatePicker(null);
+      setError(false);
     }
   };
 
@@ -100,91 +113,101 @@ export const DeleteLog = () => {
   };
 
   return (
-    <Col className='component'>
-      <Col className='mt-3 col-sm-10 mb-5'>
-        <Card className='card-style-bitacora'>
-          <Card.Header className='titleLogin'>
-            Registros de asistencia
-          </Card.Header>
-          <Card.Body>
-            <Form>
-              <Form.Group as={Row} className='mb-3' controlId='formFechas'>
-                <Col sm='3' className='mt-1'>
-                  <Form.Label>Fecha de inicio</Form.Label>
-                  <DatePicker
-                    className='date-picker-home-style'
-                    dateFormat='yyyy/MM/dd'
-                    placeholderText='Selecciona una fecha'
-                    locale='es'
-                    onChange={handleChangeStartDate}
-                    selected={startDate}
-                  />
-                </Col>
-                <Col sm='4'>
-                  <Form.Label>Nomina</Form.Label>
-                  <Form.Control
-                    className='input-style'
-                    maxLength='5'
-                    type='text'
-                    placeholder='Número de nomina'
-                    value={nomina}
-                    onChange={handleChangeNomina.bind(this)}
-                  />
-                </Col>
-                <Col sm='2' className='mt-4'>
-                  <div className='d-grid gap-2'>
-                    <Button variant='primary' onClick={handleSubmit}>
-                      <FontAwesomeIcon icon={faSearch} /> Consultar
-                    </Button>
-                  </div>
-                </Col>
-                <Col sm='2' className='mt-4'>
-                  <div className='d-grid gap-2'>
-                    <Button variant='danger' onClick={handleClean}>
-                      <FontAwesomeIcon icon={faTrash} /> Limpiar
-                    </Button>
-                  </div>
-                </Col>
-              </Form.Group>
-              <Table
-                className='table-style'
-                striped
-                bordered
-                hover
-                id='tableInfoUsers'>
-                <thead>
-                  <tr>
-                    <th>Nómina</th>
-                    <th>Nombre</th>
-                    <th>Departamento</th>
-                    <th>Borrar</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {userData &&
-                    userData.map(userInfo => (
-                      <tr key={userInfo.id}>
-                        <td>{userInfo.nomina}</td>
-                        <td>{userInfo.nombre}</td>
-                        <td>{userInfo.departamento}</td>
-                        <td>
-                          <div className='d-grid gap-2'>
-                            <Button
-                              variant='danger'
-                              size='sm'
-                              onClick={handleDelete}>
-                              <FontAwesomeIcon icon={faTrash} />
-                            </Button>
-                          </div>
-                        </td>
-                      </tr>
-                    ))}
-                </tbody>
-              </Table>
-            </Form>
-          </Card.Body>
-        </Card>
+    <>
+      <NavCaseta />
+      <Col className='component'>
+        <Col className='mt-3 col-sm-10 mb-5'>
+          <Card className='card-style-bitacora'>
+            <Card.Header className='titleLogin'>
+              Registros de asistencia
+            </Card.Header>
+            <Card.Body>
+              <Form>
+                <Form.Group as={Row} className='mb-3' controlId='formFechas'>
+                  <Col sm='3' className='mt-1'>
+                    <Form.Label>Fecha de inicio</Form.Label>
+                    <DatePicker
+                      className='date-picker-home-style'
+                      dateFormat='yyyy/MM/dd'
+                      placeholderText='Selecciona una fecha'
+                      locale='es'
+                      onChange={handleChangeStartDate}
+                      selected={startDate}
+                    />
+                  </Col>
+                  <Col sm='4'>
+                    <Form.Label>Nomina</Form.Label>
+                    <Form.Control
+                      className='input-style'
+                      maxLength='5'
+                      type='text'
+                      placeholder='Número de nomina'
+                      value={nomina}
+                      onChange={handleChangeNomina.bind(this)}
+                    />
+                  </Col>
+                  <Col sm='2' className='mt-4'>
+                    <div className='d-grid gap-2'>
+                      <Button variant='primary' onClick={handleSubmit}>
+                        <FontAwesomeIcon icon={faSearch} /> Consultar
+                      </Button>
+                    </div>
+                  </Col>
+                  <Col sm='2' className='mt-4'>
+                    <div className='d-grid gap-2'>
+                      <Button variant='danger' onClick={handleClean}>
+                        <FontAwesomeIcon icon={faTrash} /> Limpiar
+                      </Button>
+                    </div>
+                  </Col>
+                </Form.Group>
+                <Table
+                  className='table-style'
+                  striped
+                  bordered
+                  hover
+                  id='tableInfoUsers'>
+                  <thead>
+                    <tr>
+                      <th>Nómina</th>
+                      <th>Nombre</th>
+                      <th>Departamento</th>
+                      <th>Borrar</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userData &&
+                      userData.map(userInfo => (
+                        <tr key={userInfo.id}>
+                          <td>{userInfo.nomina}</td>
+                          <td>{userInfo.nombre}</td>
+                          <td>{userInfo.departamento}</td>
+                          <td>
+                            <div className='d-grid gap-2'>
+                              <Button
+                                variant='danger'
+                                size='sm'
+                                onClick={handleDelete}>
+                                <FontAwesomeIcon icon={faTrash} />
+                              </Button>
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </Table>
+              </Form>
+              {error ? (
+                <div className='alert-box'>
+                  <Alert className='alert' variant='danger'>
+                    No se encontraron registros
+                  </Alert>
+                </div>
+              ) : null}
+            </Card.Body>
+          </Card>
+        </Col>
       </Col>
-    </Col>
+    </>
   );
 };
