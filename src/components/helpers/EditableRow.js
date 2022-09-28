@@ -3,7 +3,7 @@ import { Form, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSave } from '@fortawesome/free-solid-svg-icons';
 
-const EditableRow = ({
+export const EditableRow = ({
   editFormData,
   handleEditFormChange,
   handleEditFormSubmit,
@@ -61,5 +61,3 @@ const EditableRow = ({
     </tr>
   );
 };
-
-export default EditableRow;

@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTrash } from '@fortawesome/free-solid-svg-icons';
 
-const DeleteRow = ({ userInfo, handleDeleteClick }) => {
+export const DeleteRow = ({ userInfo, handleDeleteClick }) => {
   return (
     <tr key={userInfo.id}>
       <td>{userInfo.nomina}</td>
@@ -17,5 +17,3 @@ const DeleteRow = ({ userInfo, handleDeleteClick }) => {
     </tr>
   );
 };
-
-export default DeleteRow;

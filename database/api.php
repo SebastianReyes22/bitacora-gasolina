@@ -209,4 +209,32 @@ if ($_POST['option'] == 'selectUserDelete') {
   }
 }
 
+// Buscar registros
+if ($_POST['option'] == 'deleteLog') {
+  $array = [];
+  $x = 0;
+
+  $sql =
+    'SELECT * FROM registros INNER JOIN empleados ON empleados.nomina = registros.numNomina WHERE numNomina = :nomina AND registros.date = :date ORDER BY registros.numNomina';
+
+  $statement = $bd->prepare($sql);
+
+  $statement->bindParam(':nomina', $_POST['nomina']);
+  $statement->bindParam(':date', $_POST['date']);
+  $statement->execute();
+
+  if ($statement->rowCount() >= 1) {
+    while ($row = $statement->fetch()) {
+      $array[$x]['id'] = $x;
+      $array[$x]['nomina'] = $row['nomina'];
+      $array[$x]['nombre'] = $row['nombre'];
+      $array[$x]['departamento'] = $row['departamento'];
+      $x++;
+    }
+    echo json_encode($array);
+  } else {
+    echo json_encode(['userDelete' => false]);
+  }
+}
+
 ?>

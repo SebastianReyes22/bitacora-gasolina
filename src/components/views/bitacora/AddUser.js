@@ -1,10 +1,9 @@
-import React, { useState } from 'react';
-import Headers from '../Headers';
-import HeadersAdmin from '../HeadersAdmin';
-import { useUserAuth } from '../../context/UserAuthContext';
+import { useState } from 'react';
 import { Form, Row, Col, Card, Button } from 'react-bootstrap';
+import { Headers, HeadersAdmin } from '../../helpers';
+import { useUserAuth } from '../../../context/UserAuthContext';
 
-export default function AddUser() {
+export const AddUser = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [role, setRole] = useState('');
@@ -35,7 +34,7 @@ export default function AddUser() {
     return (
       <>
         <HeadersAdmin />
-        <Row className='component'>
+        <Col className='component'>
           <Col className='mt-3 col-sm-10'>
             <Card className='card-style-bitacora'>
               <Card.Header className='titleLogin'>Agregar usuario</Card.Header>
@@ -104,7 +103,7 @@ export default function AddUser() {
               </Card.Body>
             </Card>
           </Col>
-        </Row>
+        </Col>
       </>
     );
   };
@@ -119,4 +118,4 @@ export default function AddUser() {
   };
 
   return auth();
-}
+};

@@ -1,13 +1,15 @@
 import { Route, Routes, BrowserRouter } from 'react-router-dom';
-import CreateUser from './components/views/CreateUser';
-import BitacoraGasolina from './components/views/BitacoraGasolina';
 import ProtectedRoute from './components/routes/ProtectedRoute';
-import Home from './components/views/Home';
-import Login from './components/views/Login';
-import Reports from './components/views/Reports';
-import DeleteUser from './components/views/DeleteUser';
+import { Login } from './components/views/Login';
 import PageNotFound from './components/views/PageNotFound';
-import AddUser from './components/views/AddUser';
+import {
+  AddUser,
+  BitacoraGasolina,
+  CreateUser,
+  DeleteUser,
+  Reports,
+} from './components/views/bitacora';
+import { Home, DeleteLog } from './components/views/caseta';
 import { UserAuthContextProvider } from './context/UserAuthContext';
 
 function App() {
@@ -18,6 +20,7 @@ function App() {
           <Route exact path='/' element={<Login />} />
           <Route exact path='/login' element={<Login />} />
           <Route exact path='/inicio' element={<Home />} />
+          <Route exact path='/delete-log' element={<DeleteLog />} />
           <Route
             exact
             path='/bitacoras'

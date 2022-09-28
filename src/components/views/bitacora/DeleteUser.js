@@ -1,12 +1,11 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import Headers from '../Headers';
-import HeadersAdmin from '../HeadersAdmin';
+import { useState } from 'react';
 import { Form, Row, Col, Card, Button, Table } from 'react-bootstrap';
-import DeleteRow from '../DeleteRow';
-import { useUserAuth } from '../../context/UserAuthContext';
+import axios from 'axios';
 
-const DeleteUser = () => {
+import { DeleteRow, Headers, HeadersAdmin } from '../../helpers';
+import { useUserAuth } from '../../../context/UserAuthContext';
+
+export const DeleteUser = () => {
   //Cadena de conexión
   const URI = process.env.REACT_APP_SERVER_URL;
 
@@ -110,7 +109,7 @@ const DeleteUser = () => {
   return (
     <>
       {userRol.rol == '1' ? <HeadersAdmin /> : <Headers />}
-      <Row className='component'>
+      <Col className='component'>
         <Col className='mt-3 mb-5 col-sm-10'>
           <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Eliminar Usuario</Card.Header>
@@ -229,9 +228,7 @@ const DeleteUser = () => {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Col>
     </>
   );
 };
-
-export default DeleteUser;

@@ -5,7 +5,7 @@ import DatePicker, { registerLocale } from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import es from 'date-fns/locale/es';
 
-export default function Home() {
+export const Home = () => {
   //uri de api de axios
   const URI = process.env.REACT_APP_SERVER_URL;
 
@@ -84,72 +84,79 @@ export default function Home() {
   }, []);
 
   return (
-    <Row className='component'>
-      <Col className='col-sm-6 mt-5'>
-        <Card className='card-style-bitacora'>
-          <Card.Header className='titleLogin'>
-            {' '}
-            ⛽ BITÁCORA DE GASOLINA ⛽{' '}
-          </Card.Header>
-          <Card.Body>
-            <Form>
-              <Form.Group as={Row} className='box-home'>
-                <Col sm='4'>
-                  <Form.Label column>Fecha de captura</Form.Label>
-                  <DatePicker
-                    className='date-picker-home'
-                    dateFormat='dd/MM/yyyy'
-                    selected={startDate}
-                    onChange={handleChangeStartDate}
-                    locale='es'
-                  />
-                </Col>
+    <>
+      <Col className='component'>
+        <Col className='col-sm-6 mt-5'>
+          <Card className='card-style-bitacora'>
+            <Card.Header className='titleLogin'>
+              {' '}
+              ⛽ BITÁCORA DE GASOLINA ⛽{' '}
+            </Card.Header>
+            <Card.Body>
+              <Form>
+                <Form.Group as={Row} className='box-home'>
+                  <Col sm='4'>
+                    <Form.Label column>Fecha de captura</Form.Label>
+                    <DatePicker
+                      className='date-picker-home'
+                      dateFormat='dd/MM/yyyy'
+                      selected={startDate}
+                      onChange={handleChangeStartDate}
+                      locale='es'
+                    />
+                  </Col>
+                  <Col sm='8'>
+                    <Form.Label>Número de nomina</Form.Label>
+                    <Form.Control
+                      ref={inputName}
+                      type='text'
+                      value={nomina}
+                      onChange={handleChangeNomina.bind(this)}
+                      onKeyDown={handleSubmitInput}
+                      placeholder='12345'
+                      maxLength='5'
+                    />
+                  </Col>
+                </Form.Group>
+              </Form>
+              <div className='d-grid gap-2'>
+                <Button onClick={handleSubmit} variant='primary' size='lg'>
+                  Aceptar
+                </Button>
+              </div>
+              {error ? (
+                <div className='alert-box'>
+                  <Alert className='alert' variant='danger'>
+                    {message}
+                  </Alert>
+                </div>
+              ) : null}
+              <Form.Group as={Row} className='mt-5' controlId='formFechas'>
                 <Col sm='8'>
-                  <Form.Label>Número de nomina</Form.Label>
-                  <Form.Control
-                    ref={inputName}
-                    type='text'
-                    value={nomina}
-                    onChange={handleChangeNomina.bind(this)}
-                    onKeyDown={handleSubmitInput}
-                    placeholder='12345'
-                    maxLength='5'
-                  />
+                  <Form.Label className='textUser' column>
+                    {userName}
+                  </Form.Label>
+                </Col>
+                <Col sm='4'>
+                  <Form.Label className='textUser' column>
+                    {userArea}
+                  </Form.Label>
                 </Col>
               </Form.Group>
-            </Form>
-            <div className='d-grid gap-2'>
-              <Button onClick={handleSubmit} variant='primary' size='lg'>
-                Aceptar
-              </Button>
-            </div>
-            {error ? (
-              <div className='alert-box'>
-                <Alert className='alert' variant='danger'>
-                  {message}
-                </Alert>
-              </div>
-            ) : null}
-            <Form.Group as={Row} className='mt-5' controlId='formFechas'>
-              <Col sm='8'>
-                <Form.Label className='textUser' column>
-                  {userName}
-                </Form.Label>
-              </Col>
-              <Col sm='4'>
-                <Form.Label className='textUser' column>
-                  {userArea}
-                </Form.Label>
-              </Col>
-            </Form.Group>
-            <Form.Group as={Row} className='mt-5' controlId='formFechas'>
-              <Col>
-                <img className='imageUser' src={userImage} alt='' />
-              </Col>
-            </Form.Group>
-          </Card.Body>
-        </Card>
+              <Form.Group as={Row} className='mt-5' controlId='formFechas'>
+                <Col>
+                  <img className='imageUser' src={userImage} alt='' />
+                </Col>
+              </Form.Group>
+            </Card.Body>
+          </Card>
+        </Col>
       </Col>
-    </Row>
+      <div className='delete-log'>
+        <Button variant='danger' href='./delete-log'>
+          Eliminar Registros
+        </Button>
+      </div>
+    </>
   );
-}
+};

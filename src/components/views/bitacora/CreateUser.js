@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
-import Axios from 'axios';
-import Headers from '../Headers';
-import HeadersAdmin from '../HeadersAdmin';
+import { useState } from 'react';
 import { Form, Row, Col, Card, Button } from 'react-bootstrap';
-import { useUserAuth } from '../../context/UserAuthContext';
+import Axios from 'axios';
 
-export default function CreateUser() {
+import { Headers, HeadersAdmin } from '../../helpers';
+import { useUserAuth } from '../../../context/UserAuthContext';
+
+export const CreateUser = () => {
   const URI = process.env.REACT_APP_SERVER_URL;
 
   const [nomina, setNomina] = useState('');
@@ -75,7 +75,7 @@ export default function CreateUser() {
   return (
     <>
       {userRol.rol == '1' ? <HeadersAdmin /> : <Headers />}
-      <Row className='component'>
+      <Col className='component'>
         <Col className='mt-3 col-sm-10'>
           <Card className='card-style-bitacora'>
             <Card.Header className='titleLogin'>Agregar empleado</Card.Header>
@@ -175,7 +175,7 @@ export default function CreateUser() {
             </Card.Body>
           </Card>
         </Col>
-      </Row>
+      </Col>
     </>
   );
-}
+};

@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button, Card, Col, Form, Row } from 'react-bootstrap';
 import '../../styles/styles.css';
 
-const Login = () => {
+export const Login = () => {
   const [userName, setUserName] = useState('');
   const [passwordUser, setPasswordUser] = useState('');
   const inputName = useRef(null);
@@ -38,7 +38,7 @@ const Login = () => {
   }, []);
 
   return (
-    <Row className='component'>
+    <Col className='component'>
       <Col className='col-sm-4 mt-5'>
         <Card className='card-style-login'>
           <Card.Header className='titleLogin'>Inicio de sesión</Card.Header>
@@ -73,8 +73,6 @@ const Login = () => {
           </Card.Body>
         </Card>
       </Col>
-    </Row>
+    </Col>
   );
 };
-
-export default Login;

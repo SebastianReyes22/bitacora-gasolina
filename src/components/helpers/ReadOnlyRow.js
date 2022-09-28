@@ -3,7 +3,7 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPencilAlt } from '@fortawesome/free-solid-svg-icons';
 
-const ReadOnlyRow = ({ userInfo, handleEditClick }) => {
+export const ReadOnlyRow = ({ userInfo, handleEditClick }) => {
   return (
     <tr key={userInfo.id}>
       <td>{userInfo.nomina}</td>
@@ -19,5 +19,3 @@ const ReadOnlyRow = ({ userInfo, handleEditClick }) => {
     </tr>
   );
 };
-
-export default ReadOnlyRow;

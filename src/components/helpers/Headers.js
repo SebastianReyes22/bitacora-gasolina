@@ -1,10 +1,10 @@
 import React from 'react';
 import { Navbar, Container, Nav, NavDropdown } from 'react-bootstrap';
-import { useUserAuth } from '../context/UserAuthContext';
-import withPosco from '../images/withPosco.png';
-import poscoLogo from '../images/poscoLogo.png';
+import { useUserAuth } from '../../context/UserAuthContext';
+import withPosco from '../../images/withPosco.png';
+import poscoLogo from '../../images/poscoLogo.png';
 
-const HeadersAdmin = () => {
+export const Headers = () => {
   const { logOut } = useUserAuth();
 
   //Logout
@@ -52,7 +52,6 @@ const HeadersAdmin = () => {
                 ⛽ Sistema Caseta
               </NavDropdown.Item>
             </NavDropdown>
-            <Nav.Link href='./addUser'> 👤 Agregar Usuario</Nav.Link>
           </Nav>
           <Nav>
             <Nav.Link
@@ -68,5 +67,3 @@ const HeadersAdmin = () => {
     </Navbar>
   );
 };
-
-export default HeadersAdmin;
