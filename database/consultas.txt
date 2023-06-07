@@ -1,9 +1,0 @@
-REGISTRO DE ENTRADAS Y SALIDAS DE EMPLEADOS
-
-SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.fechaEntrada, registros.fechaSalida FROM empleados JOIN registros ON registros.numNomina = empleados.nomina WHERE empleados.nomina = 
-
-~~~ Consulta para obtener el registro de los empleados aplicando flitros ~~~
-"SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.fechaEntrada, registros.fechaSalida FROM empleados JOIN registros ON registros.numNomina = empleados.nomina WHERE registros.fechaEntrada BETWEEN '2021-01-03T06:00:00.000Z' AND '2022-01-03T06:00:00.000Z' AND empleados.nomina LIKE '%' AND empleados.nombre LIKE '%' AND empleados.departamento LIKE '%' ORDER BY registros.fechaEntrada;
-
-~~~ Consulta para obtener el porcentaje de asistencia de los empleados ~~~
-SELECT empleados.nomina, empleados.nombre, empleados.departamento, asistencia, promedio FROM (SELECT empleados.nomina, empleados.nombre, empleados.departamento, COUNT(registros.fechaEntrada) AS asistencia, (COUNT(registros.fechaEntrada) / 30 * 100) AS promedio FROM empleados INNER JOIN registros ON empleados.nomina = registros.numNomina WHERE registros.fechaEntrada BETWEEN '2022-01-01T06:00:00.000Z' AND '2022-02-01T06:00:00.000Z' GROUP BY empleados.nomina, empleados.nombre, registros.numNomina) empleados GROUP BY empleados.nomina, empleados.nombre
