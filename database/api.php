@@ -1,6 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
-$dsn = 'mysql:host=localhost;dbname=bitacora_gasolina';
+$dsn = 'mysql:host=localhost;dbname=reportes_gasolina';
 $user = 'root';
 $pwd = '';
 try {
@@ -32,15 +32,15 @@ if ($_POST['option'] == 'selectEmpleado') {
   $array = [];
   $x = 0;
   // $sql = 'SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina;';
-  $sql =
-    'SELECT nomina, nombre, foto, departamento, COUNT(date) AS "cuenta" FROM empleados INNER JOIN registros WHERE empleados.nomina = :nomina AND date = :date AND registros.numNomina = :nomina;';
-
+  $sql = 'SELECT nomina, nombre, foto, departamento, COUNT(date) AS "cuenta" FROM empleados INNER JOIN registros WHERE empleados.nomina = :nomina AND date = :date AND registros.numNomina = :nomina;';
+  
   $statement = $bd->prepare($sql);
   $statement->bindParam(':nomina', $_POST['nomina']);
   $statement->bindParam(':date', $_POST['date']);
   $statement->execute();
 
   if ($statement->rowCount() >= 1) {
+  
     while ($row = $statement->fetch()) {
       $array[$x]['nomina'] = $row['nomina'];
       $array[$x]['nombre'] = $row['nombre'];
@@ -49,14 +49,13 @@ if ($_POST['option'] == 'selectEmpleado') {
       $array[$x]['cuenta'] = $row['cuenta'];
       $x++;
 
-      if ($row['nomina'] != null) {
+      if ($row['nomina'] != null)  {
         if ($row['cuenta'] == 0) {
-          $sql =
-            'INSERT INTO registros (numNomina, date) VALUES (:nomina, :date);';
+          $sql = 'INSERT INTO registros (numNomina, date) VALUES (:nomina, :date);';
           $statement = $bd->prepare($sql);
           $statement->bindParam(':nomina', $_POST['nomina']);
           $statement->bindParam(':date', $_POST['date']);
-          $statement->execute();
+          $statement->execute();       
           echo json_encode([
             'info' => true,
             'name' => $row['nombre'],
@@ -65,9 +64,7 @@ if ($_POST['option'] == 'selectEmpleado') {
             'message' => 'Ususario registrado correctamente',
           ]);
         } else {
-          echo json_encode([
-            'message' => 'ERROR: Usuario registrado el día de hoy',
-          ]);
+          echo json_encode(['message' => 'ERROR: Usuario registrado el día de hoy']);    
         }
       } else {
         echo json_encode(['message' => 'ERROR: Usuario no registrado']);
@@ -210,12 +207,11 @@ if ($_POST['option'] == 'selectUserDelete') {
 }
 
 // Buscar registros
-if ($_POST['option'] == 'deleteLog') {
+if ($_POST['option'] == 'findLog') {
   $array = [];
   $x = 0;
 
-  $sql =
-    'SELECT * FROM registros INNER JOIN empleados ON empleados.nomina = registros.numNomina WHERE numNomina = :nomina AND registros.date = :date ORDER BY registros.numNomina';
+  $sql = "SELECT * FROM registros INNER JOIN empleados ON empleados.nomina = registros.numNomina WHERE numNomina = :nomina AND registros.date = :date ORDER BY registros.numNomina";
 
   $statement = $bd->prepare($sql);
 
@@ -233,7 +229,23 @@ if ($_POST['option'] == 'deleteLog') {
     }
     echo json_encode($array);
   } else {
-    echo json_encode(['userDelete' => false]);
+    echo json_encode(['registros' => false]);
+  }
+}
+
+//DELETE USER
+if ($_POST['option'] == 'deleteLog') {
+  $sql = 'DELETE FROM registros WHERE numNomina = :nomina AND date = :date';
+  $statement = $bd->prepare($sql);
+
+  $statement->bindParam(':nomina', $_POST['nomina']);
+  $statement->bindParam(':date', $_POST['date']);
+  $statement->execute();
+
+  if ($statement->rowCount() >= 1) {
+    echo json_encode(['delete' => true]);
+  } else {
+    echo json_encode(['delete' => false]);
   }
 }
 

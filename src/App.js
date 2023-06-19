@@ -14,7 +14,7 @@ import { UserAuthContextProvider } from './context/UserAuthContext';
 
 function App() {
   return (
-    <BrowserRouter basename='/bitacora-gasolina'>
+    <BrowserRouter basename='/reportes-gasolina'>
       <UserAuthContextProvider>
         <Routes>
           <Route exact path='/' element={<Login />} />

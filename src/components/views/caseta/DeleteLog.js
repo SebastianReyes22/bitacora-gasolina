@@ -41,12 +41,16 @@ export const DeleteLog = () => {
   const [userData, setUserData] = useState([]);
   const [nomina, setNomina] = useState('');
 
+  // Input de ubicacion de planta
+  const [ubicacion, setUbicacion] = useState('');
+
   //Funcion que busca los datos de la bitacora
   const handleSubmit = async () => {
     let formData = new FormData();
     formData.append('option', 'findLog');
     formData.append('nomina', nomina);
     formData.append('date', datePicker);
+    formData.append('planta', ubicacion);
 
     await Axios({
       method: 'POST',
@@ -88,6 +92,8 @@ export const DeleteLog = () => {
         } else {
           alert('Registros eliminados');
           setUserData([]);
+          setUbicacion('');
+          setNomina('')
         }
       })
       .catch(error => {
@@ -124,7 +130,19 @@ export const DeleteLog = () => {
             <Card.Body>
               <Form>
                 <Form.Group as={Row} className='mb-3' controlId='formFechas'>
-                  <Col sm='3' className='mt-1'>
+                  <Col className='col-2'>
+                    <Form.Label>Planta</Form.Label>
+                    <Form.Select
+                      value={ubicacion}
+                      onChange={e => setUbicacion(e.target.value)}>
+                      <option value=''>Seleccione ubicación</option>
+                      <option value='1'>Puebla</option>
+                      <option value='2'>San Luis Potosi</option>
+                      <option value='3'>Celaya</option>
+                      <option value='4'>Aguascalientes</option>
+                    </Form.Select>
+                  </Col>
+                  <Col className='mt-1 col-2'>
                     <Form.Label>Fecha de inicio</Form.Label>
                     <DatePicker
                       className='date-picker-home-style'

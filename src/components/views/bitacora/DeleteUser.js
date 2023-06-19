@@ -19,6 +19,9 @@ export const DeleteUser = () => {
 
   const { userRol } = useUserAuth();
 
+  // Input de ubicacion de planta
+  const [ubicacion, setUbicacion] = useState('');
+
   //Funcion que cambia el valor del input nomina
   const handleChangeNomina = e => {
     e.preventDefault();
