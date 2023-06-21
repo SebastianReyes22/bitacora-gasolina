@@ -119,7 +119,7 @@ export const BitacoraGasolina = () => {
               <Form>
                 <Form.Group className='mb-3' controlId='formFechas'>
                   <Row>
-                    <Col className='col-2'>
+                    <Col className='col-3'>
                       <Form.Label>Planta</Form.Label>
                       <Form.Select
                         value={ubicacion}
@@ -131,7 +131,7 @@ export const BitacoraGasolina = () => {
                         <option value='4'>Aguascalientes</option>
                       </Form.Select>
                     </Col>
-                    <Col className='col-2'>
+                    <Col className='col-3'>
                       <Form.Label column>Fecha de inicio</Form.Label>
                       <DatePicker
                         dateFormat='yyyy/MM/dd'
@@ -141,7 +141,7 @@ export const BitacoraGasolina = () => {
                         locale='es'
                       />
                     </Col>
-                    <Col className='col-2'>
+                    <Col className='col-3'>
                       <Form.Label column>Fecha de termino</Form.Label>
                       <DatePicker
                         dateFormat='yyyy/MM/dd'
@@ -152,7 +152,7 @@ export const BitacoraGasolina = () => {
                         minDate={startDate}
                         />
                     </Col>
-                    <Col className='col-6'>
+                    <Col className='col-3'>
                       <Form.Label>Número nomina</Form.Label>
                       <Form.Control
                         sm='6'

@@ -32,11 +32,12 @@ if ($_POST['option'] == 'selectEmpleado') {
   $array = [];
   $x = 0;
   // $sql = 'SELECT nombre, foto, departamento FROM empleados WHERE nomina = :nomina;';
-  $sql = 'SELECT nomina, nombre, foto, departamento, COUNT(date) AS "cuenta" FROM empleados INNER JOIN registros WHERE empleados.nomina = :nomina AND date = :date AND registros.numNomina = :nomina;';
+  $sql = 'SELECT nomina, nombre, foto, departamento, empleados.planta, COUNT(date) AS "cuenta" FROM empleados INNER JOIN registros WHERE empleados.nomina = :nomina AND date = :date AND registros.numNomina = :nomina AND empleados.planta = :id_planta;';
   
   $statement = $bd->prepare($sql);
   $statement->bindParam(':nomina', $_POST['nomina']);
   $statement->bindParam(':date', $_POST['date']);
+  $statement->bindParam(':id_planta', $_POST['id_planta']);
   $statement->execute();
 
   if ($statement->rowCount() >= 1) {
@@ -46,21 +47,26 @@ if ($_POST['option'] == 'selectEmpleado') {
       $array[$x]['nombre'] = $row['nombre'];
       $array[$x]['foto'] = $row['foto'];
       $array[$x]['departamento'] = $row['departamento'];
+      $array[$x]['id_planta'] = $row['planta'];
       $array[$x]['cuenta'] = $row['cuenta'];
       $x++;
 
       if ($row['nomina'] != null)  {
         if ($row['cuenta'] == 0) {
-          $sql = 'INSERT INTO registros (numNomina, date) VALUES (:nomina, :date);';
+          $sql = 'INSERT INTO registros (numNomina, date, planta) VALUES (:nomina, :date, :id_planta);';
+          
           $statement = $bd->prepare($sql);
           $statement->bindParam(':nomina', $_POST['nomina']);
           $statement->bindParam(':date', $_POST['date']);
+          $statement->bindParam(':id_planta', $_POST['id_planta']);
+
           $statement->execute();       
           echo json_encode([
             'info' => true,
             'name' => $row['nombre'],
             'picture' => $row['foto'],
             'deparment' => $row['departamento'],
+            'id_planta' => $row['planta'],
             'message' => 'Ususario registrado correctamente',
           ]);
         } else {
@@ -76,9 +82,10 @@ if ($_POST['option'] == 'selectEmpleado') {
 //Agregar nuevos usuarios
 if ($_POST['option'] == 'insertUser') {
   $sql =
-    'INSERT INTO empleados (nomina, nombre, foto, departamento) VALUES (:nomina, :nombre, :foto, :departamento)';
+    'INSERT INTO empleados (planta, nomina, nombre, foto, departamento) VALUES (:planta, :nomina, :nombre, :foto, :departamento)';
   $statement = $bd->prepare($sql);
 
+  $statement->bindParam(':planta', $_POST['planta']);
   $statement->bindParam(':nomina', $_POST['nomina']);
   $statement->bindParam(':nombre', $_POST['nombre']);
   $statement->bindParam(':foto', $_POST['foto']);
@@ -99,11 +106,12 @@ if ($_POST['option'] == 'selectUser') {
 
   $sql = "SELECT empleados.nomina, empleados.departamento, empleados.nombre, registros.date 
     FROM empleados JOIN registros ON empleados.nomina = registros.numNomina
-    WHERE registros.date BETWEEN :startDate AND :endDate AND empleados.nomina LIKE CONCAT('%', :nomina '%') AND empleados.nombre 
+    WHERE empleados.planta = :planta AND registros.date BETWEEN :startDate AND :endDate AND empleados.nomina LIKE CONCAT('%', :nomina '%') AND empleados.nombre 
     LIKE CONCAT('%', :userName, '%') AND empleados.departamento LIKE CONCAT('%', :department, '%') ORDER BY registros.date";
 
   $statement = $bd->prepare($sql);
 
+  $statement->bindParam(':planta', $_POST['planta']);
   $statement->bindParam(':startDate', $_POST['startDate']);
   $statement->bindParam(':endDate', $_POST['endDate']);
   $statement->bindParam(':nomina', $_POST['nomina']);
@@ -135,13 +143,14 @@ if ($_POST['option'] == 'getReports') {
                 FROM (SELECT empleados.nomina, empleados.nombre, empleados.departamento, 
                 COUNT(registros.date) AS asistencia, (COUNT(registros.date) / 30 * 100) 
                 AS promedio FROM empleados INNER JOIN registros ON empleados.nomina = registros.numNomina 
-                WHERE registros.date BETWEEN :startDate AND :endDate 
+                WHERE empleados.planta = :planta AND registros.date BETWEEN :startDate AND :endDate 
                 GROUP BY empleados.nomina, empleados.nombre, registros.numNomina) 
             empleados 
             GROUP BY empleados.nomina, empleados.nombre";
 
   $statement = $bd->prepare($sql);
 
+  $statement->bindParam(':planta', $_POST['planta']);
   $statement->bindParam(':startDate', $_POST['startDate']);
   $statement->bindParam(':endDate', $_POST['endDate']);
   $statement->execute();
@@ -211,12 +220,13 @@ if ($_POST['option'] == 'findLog') {
   $array = [];
   $x = 0;
 
-  $sql = "SELECT * FROM registros INNER JOIN empleados ON empleados.nomina = registros.numNomina WHERE numNomina = :nomina AND registros.date = :date ORDER BY registros.numNomina";
+  $sql = "SELECT * FROM registros INNER JOIN empleados ON empleados.nomina = registros.numNomina WHERE numNomina = :nomina AND registros.date = :date AND registros.planta = :planta ORDER BY registros.numNomina";
 
   $statement = $bd->prepare($sql);
 
   $statement->bindParam(':nomina', $_POST['nomina']);
   $statement->bindParam(':date', $_POST['date']);
+  $statement->bindParam(':planta', $_POST['planta']);
   $statement->execute();
 
   if ($statement->rowCount() >= 1) {
@@ -225,6 +235,7 @@ if ($_POST['option'] == 'findLog') {
       $array[$x]['nomina'] = $row['nomina'];
       $array[$x]['nombre'] = $row['nombre'];
       $array[$x]['departamento'] = $row['departamento'];
+      $array[$x]['planta'] = $row['planta'];
       $x++;
     }
     echo json_encode($array);
